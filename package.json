@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "sass": "^1.82.0",
+    "vh-check": "^2.0.5",
     "vue": "^3.5.13"
   },
   "devDependencies": {
     "@samrum/vite-plugin-web-extension": "^5.1.1",
     "@types/chrome": "^0.0.238",
     "@types/node": "^20.17.9",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-vue": "^4.6.2",
     "amfe-flexible": "^2.2.1",
     "fast-glob": "^3.3.2",

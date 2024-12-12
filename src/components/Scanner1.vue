@@ -4,14 +4,10 @@
       <SvgIcon name="qrcode" color="#fff" size="40px" />
     </div>
     <div class="scan">
+      <div class="qrcode"></div>
       <div class="border">
-        <div id="reader" class="reader"></div>
-        <div class="borderRadio left-top"></div>
-        <div class="borderRadio right-top"></div>
-        <div class="borderRadio right-bottom"></div>
-        <div class="borderRadio left-bottom"></div>
+        <div id="reader"></div>
       </div>
-      
     </div>
     <div class="light-box">
       <SvgIcon name="qrcode" color="#fff" size="40px" />
@@ -31,22 +27,19 @@
     <div class="input-box">
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
-    <History v-model:DialogVisible="show" :list="historyRecords"/>
-    <History v-model:DialogVisible="itemShow" :list="Record"/>
+    <HistoryDialog v-model="visible" :list="historyRecords"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
-import History from './History.vue'
+import HistoryDialog from './History.vue'
 import SvgIcon from './SvgIcon.vue'
 let html5QrCode = reactive<any>(null)
-let historyRecords = reactive<any>([])
-let Record = reactive<any>([])
+let historyRecords = reactive<any>(["asda", "asda", "asdsa"])
 let isShow = ref(false)
-let show = ref(false)
-let itemShow = ref(false)
+let visible = ref(false)
 let devicesInfo = ref('')
 onMounted(() => {
   getCameras()
@@ -67,7 +60,8 @@ const getCameras = () => {
       }
     })
     .catch((err) => {
-      // alert('获取设备信息失败')
+      // handle err
+      alert('获取设备信息失败')
       console.log('获取设备信息失败', err) // 获取设备信息失败
       // showToast('获取设备信息失败')
     })
@@ -76,16 +70,18 @@ const start = () => {
   html5QrCode
     ?.start(
     { facingMode: 'environment' },
-    { 
-      fps: 120, // 设置每秒多少帧
-      // qrbox: { width: 547, height: 547 } // 设置取景范围
+    {
+      fps: 90, // 设置每秒多少帧
+      qrbox: { width: 800, height: 800 } // 设置取景范围
       // scannable, rest shaded.
     },
     (decodedText: string, decodedResult: string) => {
+      alert(decodedText)
       if (!historyRecords.includes(decodedText))  historyRecords.push(decodedText)
       console.log('result', decodedResult)
-      Record[0] = decodedText
-      itemShow.value = true
+    },
+    (errorMessage: string) => {
+      console.log('暂无额扫描结果', errorMessage)
     }
   )
     .catch((err: string) => {
@@ -110,14 +106,14 @@ const stop = () => {
 }
 
 const openHistoryRecord = () => {
-  if (!Boolean(historyRecords.length)) return
-  show.value = true
+  console.log("sds")
+  visible.value = true
 }
 </script>
 
 <style lang="scss" scoped>
 .Scanner {
-  height: calc(100vh - 40px);
+  // height: 100vh;
   width: 100%;
   overflow: hidden;
   background-color: #111;
@@ -163,46 +159,88 @@ const openHistoryRecord = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    .border {
+    max-height: 40vh;
+    max-width: 40vh;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid rgb(118, 113, 113);
+    // border: 4px solid;
+    // border-radius: 10px;
+    // -webkit-mask: conic-gradient(from -90deg at 40px 40px, red 90deg, transparent 0deg);
+    // -webkit-mask-position: -20px -20px;
+    .qrcode {
       position: relative;
+      width: 800px;
+      height: 400px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        animation: animate 4s ease-in-out infinite;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 20px;
+        width: 800px;
+        height: 2px;
+        background: #35fd5c;
+        filter: drop-shadow(0 0 20px #35fd5c) drop-shadow(0 0 60px #35fd5c);
+        animation: animate_line 4s ease-in-out infinite;
+      }
     }
-    .reader {
-      width: 40vh;
-    }
-    .borderRadio {
-      width: 25px;
-      height: 25px;
-      border-radius: 3px;
-      border: 4px solid #fff;
-    }
-    .left-top {
+
+    .border {
       position: absolute;
-      top: 0;
-      left: 0;
-      border-bottom: none;
-      border-right: none;
+      inset: 0;
+      // background-size: 400px;
+      background-repeat: no-repeat;
+      animation: animate_text 2s linear infinite;
+
+      #reader {
+        width: 100%;
+        height: 100%;
+        
+        video {
+          width: 100%;
+          height: 100%;
+          
+        }
+      }
     }
-    .right-top {
-      position: absolute;
-      top: 0;
-      right: 0;
-      border-bottom: none;
-      border-left: none;
+
+    @keyframes animate {
+      0%,
+      100% {
+        height: 20px;
+      }
+      50% {
+        height: calc(100% - 20px);
+      }
     }
-    .right-bottom {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      border-top: none;
-      border-left: none;
+    @keyframes animate_line {
+      0%,
+      100% {
+        top: 20px;
+      }
+      50% {
+        top: calc(100% - 20px);
+      }
     }
-    .left-bottom {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      border-top: none;
-      border-right: none;
+
+    @keyframes animate_text {
+      0%,
+      100% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
     }
   }
 }

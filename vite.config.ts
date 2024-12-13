@@ -32,10 +32,11 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     }),
     VitePWA({
+      injectRegister: 'auto',
       registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
       manifest: {
-        name: 'demo name', // 项目名
-        id: 'csdn',
+        name: 'Scanner', // 项目名
+        id: 'Scanner',
         short_name: 'Scanner',
         description: '一个Vite PWA测试APP',
         theme_color: '#DC143C', // 红 // 用于设置工具栏的颜色，并且可以反映在任务切换器中的应用预览中。theme_color 应与文档标头中指定的 meta 主题颜色一致。
@@ -66,6 +67,8 @@ export default defineConfig({
       },
       workbox: {
         // globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}'],		// 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
+        clientsClaim: true,
+        skipWaiting: true,
       },
       devOptions: {
         enabled: true,

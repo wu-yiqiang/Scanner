@@ -22,15 +22,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    basicSsl(),
     vue(),
-    svgLoader(),
-    createSvgIconsPlugin({
-      // 指定需要缓存的图标文件夹
-      iconDirs: [pathResolve('src/assets/svg/')],
-      // 指定symbolId格式
-      symbolId: 'icon-[dir]-[name]',
-    }),
     VitePWA({
       injectRegister: 'auto',
       registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
@@ -38,10 +30,10 @@ export default defineConfig({
         name: 'Scanner', // 项目名
         id: 'Scanner',
         short_name: 'Scanner',
-        description: '一个Vite PWA测试APP',
-        theme_color: '#DC143C', // 红 // 用于设置工具栏的颜色，并且可以反映在任务切换器中的应用预览中。theme_color 应与文档标头中指定的 meta 主题颜色一致。
-        background_color: '#FFFF00', // 黄-首次在移动设备上启动应用时，启动画面会使用 background_color 属性。
-        display: 'minimal-ui', // 您可以自定义应用启动时显示的浏览器界面。例如，您可以隐藏地址栏和浏览器界面元素
+        description: '扫码器',
+        theme_color: '#4DBA87',
+        background_color: '#000000', // 首次在移动设备上启动应用时，启动画面会使用 background_color 属性。
+        display: 'fullscreen', // 您可以自定义应用启动时显示的浏览器界面。例如，您可以隐藏地址栏和浏览器界面元素
         icons: [
           //添加图标，注意路径和图像像素正确，sizes必须和图片的尺寸一致
           {
@@ -73,6 +65,14 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
+    }),
+    basicSsl(),
+    svgLoader(),
+    createSvgIconsPlugin({
+      // 指定需要缓存的图标文件夹
+      iconDirs: [pathResolve('src/assets/svg/')],
+      // 指定symbolId格式
+      symbolId: 'icon-[dir]-[name]',
     }),
   ],
   server: {

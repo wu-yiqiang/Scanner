@@ -14,8 +14,8 @@
       <SvgIcon name="qrcode" color="#fff" size="40px" />
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
-    <History v-model:DialogVisible="show" :list="historyRecords" />
-    <History v-model:DialogVisible="itemShow" :list="Record" />
+    <History v-model:visible="show" :list="historyRecords" />
+    <History v-model:visible="itemShow" :list="Record" />
   </div>
 </template>
 

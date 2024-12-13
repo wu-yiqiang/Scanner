@@ -1,5 +1,5 @@
 <template>
-  <Dialog :visible="props.DialogVisible"  @update="cancelDialog">
+  <Dialog v-model:visible="open" @update="open = false">
     <div v-for="(item, index) in props.list" :key="index">
       <div class="item">
         <span class="contents">{{ item }}</span>
@@ -12,22 +12,31 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import Dialog from './Dialog.vue'
 import SvgIcon from './SvgIcon.vue'
 import Toast from './Toast/index.ts'
+const emit = defineEmits(['update:visible'])
 const props = defineProps({
   list: {
     require: true,
     type: Object,
-    default: () => []
+    default: () => [],
   },
-  DialogVisible: {
+  visible: {
     require: true,
     type: Boolean,
-    default: false
+    default: false,
   },
 })
-const emit = defineEmits(['update:DialogVisible'])
+const open = computed({
+  get() {
+    return props?.visible
+  },
+  set(value) {
+    emit('update:visible', value)
+  },
+})
 
 function handleCopy(str: string) {
   var aux = document.createElement('input')
@@ -39,9 +48,6 @@ function handleCopy(str: string) {
   Toast.success('复制成功')
 }
 
-function cancelDialog() {
-  emit('update:DialogVisible', false)
-}
 </script>
 
 <style lang="scss" scoped>

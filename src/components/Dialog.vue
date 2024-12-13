@@ -1,5 +1,5 @@
 <template>
-  <div to="body" v-if="props.visible" class="Dialog" @click.stop="cancelDialog">
+  <div to="body" v-if="open" class="Dialog" @click.stop="open = false">
     <div class="content-box">
       <slot />
     </div>
@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import {computed} from 'vue'
+const emit = defineEmits(['update:visible'])
 const props = defineProps({
   visible: {
     require: true,
@@ -14,11 +16,15 @@ const props = defineProps({
     default: false
   },
 })
-const emit = defineEmits(['update'])
 
-function cancelDialog() {
-  emit('update')
-}
+const open = computed({
+  get() {
+    return props?.visible
+  },
+  set(value) {
+    emit('update:visible', value)
+  },
+})
 
 </script>
 

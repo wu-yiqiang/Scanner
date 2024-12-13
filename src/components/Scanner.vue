@@ -22,6 +22,7 @@
 import ScannerContents from './ScannerContents.vue'
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
+import Toast from './Toast/index.ts'
 import SvgIcon from './SvgIcon.vue'
 let html5QrCode = reactive<any>(null)
 let historyRecords = reactive<any>([])
@@ -48,9 +49,7 @@ const getCameras = () => {
       }
     })
     .catch((err) => {
-      // alert('获取设备信息失败')
-      console.log('获取设备信息失败', err) // 获取设备信息失败
-      // showToast('获取设备信息失败')
+      Toast.error('获取设备信息失败')
     })
 }
 const start = () => {
@@ -69,7 +68,7 @@ const start = () => {
       }
     )
     .catch((err: string) => {
-      console.log(`Unable to start scanning, error: ${err}`)
+      Toast.error(`Unable to start scanning, error: ${err}`)
     })
 }
 
@@ -78,12 +77,10 @@ const stop = () => {
     html5QrCode
       .stop()
       .then((ignore: string) => {
-        // QR Code scanning is stopped.
-        console.log('QR Code scanning stopped.', ignore)
+        Toast.error(`QR Code scanning stopped.`)
       })
       .catch((err: string) => {
-        // Stop failed, handle it.
-        console.log('Unable to stop scanning.', err)
+        Toast.error(`Unable to stop scanning.\n${err}`)
       })
   }
 }

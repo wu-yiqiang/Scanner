@@ -23,10 +23,10 @@ const props = defineProps({
     type: String,
     default: 'warn',
   },
-  // 消息停留时间：0 表示需要手动关闭
+  // 消息停留时间：0 表示需要手动关闭 毫秒
   duration: {
     type: Number,
-    default: 2000,
+    default: 4000,
   },
 })
 type MessageStyle = {

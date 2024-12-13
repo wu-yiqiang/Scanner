@@ -2,7 +2,7 @@ import { createVNode, render } from 'vue';
 import Toast from './index.vue';
 
 const div = document.createElement('div');
-const MESSAGE_TIMEOUT = 2000;
+const MESSAGE_TIMEOUT = 4000;
 // 添加到body上
 document.body.appendChild(div);
 
@@ -14,7 +14,6 @@ const renderMessage = (vnode: any, duration: number) => {
     render(vnode, div);
     clearTimeout(timer); // 清理上一个定时器
     if (duration) {
-        console.log('sssssss')
         timer = setTimeout(() => {
             render(null, div);
         }, duration);

@@ -5,7 +5,8 @@
     </div>
     <div class="scan">
       <div class="border">
-        <div id="reader" class="reader"></div>
+        <div class="line"></div>
+        <div id="reader" class="reader" />
       </div>
     </div>
     <div class="tool-bar">
@@ -112,7 +113,6 @@ $-scanner-color: orange;
     justify-content: flex-start;
   }
   .scan {
-    // padding: 0 40px 40px 40px;
     flex: 1;
     flex-grow: 1;
     display: flex;
@@ -130,10 +130,24 @@ $-scanner-color: orange;
       background-size: 4px 30px, 30px 3px, 4px 30px, 30px 4px;
       border-radius: 4px;
       padding: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       .reader {
         min-height: 200px;
         width: 60vw;
+        display: flex;
+        justify-content: center;
+
       }
+      .line {
+          width: 80%;
+          height: 4px;
+          border-radius: 2px;
+          background-color: $-scanner-color;
+          // transform: translateY(-500px);
+          // z-index: 99999999999;
+        }
     }
   }
   .tool-bar {

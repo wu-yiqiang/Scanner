@@ -1,5 +1,5 @@
 <template>
-  <!-- <div class="Scanner">
+  <div class="Scanner">
     <div class="logo-box">
       <SvgIcon name="qrcode" color="#fff" size="40px" />
     </div>
@@ -15,8 +15,8 @@
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
-  </div> -->
-  <demo  />
+  </div>
+  <!-- <demo  /> -->
 </template>
 
 <script setup lang="ts">
@@ -90,7 +90,8 @@ const stop = () => {
 </script>
 
 <style lang="scss" scoped>
-$-scanner-color: orange;
+$-scanner-color: rgba(255, 165, 0, 1);
+
 .Scanner {
   flex: 1;
   overflow: hidden;
@@ -100,16 +101,19 @@ $-scanner-color: orange;
   justify-content: space-between;
   row-gap: 10px;
   padding: 10px;
+
   .logo-box {
     display: flex;
     justify-content: flex-start;
   }
+
   .scan {
     flex: 1;
     flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+
     .border {
       background: linear-gradient(to left, $-scanner-color, $-scanner-color) left top no-repeat,
         linear-gradient(to bottom, $-scanner-color, $-scanner-color) left top no-repeat,
@@ -125,31 +129,8 @@ $-scanner-color: orange;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-image:
-          linear-gradient(0deg,
-            transparent 24%,
-            rgba(32, 255, 77, 0.1) 25%,
-            rgba(32, 255, 77, 0.1) 26%,
-            transparent 27%,
-            transparent 74%,
-            rgba(32, 255, 77, 0.1) 75%,
-            rgba(32, 255, 77, 0.1) 76%,
-            transparent 77%,
-            transparent),
-          linear-gradient(90deg,
-            transparent 24%,
-            rgba(32, 255, 77, 0.1) 25%,
-            rgba(32, 255, 77, 0.1) 26%,
-            transparent 27%,
-            transparent 74%,
-            rgba(32, 255, 77, 0.1) 75%,
-            rgba(32, 255, 77, 0.1) 76%,
-            transparent 77%,
-            transparent);
-        background-size: 3rem 3rem;
-        background-position: -1rem -1rem;
-        background: linear-gradient(180deg, rgba(0, 255, 51, 0) 50%, #00ff33 300%);
-          border-bottom: 2px solid #00ff33;
+      position: relative;
+
       .reader {
         min-height: 200px;
         width: 60vw;
@@ -157,14 +138,29 @@ $-scanner-color: orange;
         justify-content: center;
 
       }
+
       .line {
-          width: 80%;
-          height: 4px;
-          border-radius: 2px;
-          background-color: $-scanner-color;
-          // transform: translateY(-500px);
-          // z-index: 99999999999;
+        position: absolute;
+        width: 60%;
+        height: 4px;
+        border-radius: 2px;
+        background-color: $-scanner-color;
+        z-index: 99999999999;
+        animation: scan 1.5s ease-in both;
+        animation-direction: alternate;
+        animation-iteration-count: infinite;
+        box-shadow: 0px 0px 120px 20px rgba(255, 165, 0, .5);
+      }
+
+      @keyframes scan {
+        0% {
+          top: 25%;
         }
+
+        100% {
+          top: 75%;
+        }
+      }
     }
   }
   .tool-bar {

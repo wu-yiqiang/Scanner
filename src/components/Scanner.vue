@@ -1,5 +1,5 @@
 <template>
-  <div class="Scanner">
+  <!-- <div class="Scanner">
     <div class="logo-box">
       <SvgIcon name="qrcode" color="#fff" size="40px" />
     </div>
@@ -15,10 +15,12 @@
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
-  </div>
+  </div> -->
+  <demo  />
 </template>
 
 <script setup lang="ts">
+import demo from './demo.vue'
 import ScannerContents from './ScannerContents.vue'
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
@@ -123,6 +125,31 @@ $-scanner-color: orange;
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-image:
+          linear-gradient(0deg,
+            transparent 24%,
+            rgba(32, 255, 77, 0.1) 25%,
+            rgba(32, 255, 77, 0.1) 26%,
+            transparent 27%,
+            transparent 74%,
+            rgba(32, 255, 77, 0.1) 75%,
+            rgba(32, 255, 77, 0.1) 76%,
+            transparent 77%,
+            transparent),
+          linear-gradient(90deg,
+            transparent 24%,
+            rgba(32, 255, 77, 0.1) 25%,
+            rgba(32, 255, 77, 0.1) 26%,
+            transparent 27%,
+            transparent 74%,
+            rgba(32, 255, 77, 0.1) 75%,
+            rgba(32, 255, 77, 0.1) 76%,
+            transparent 77%,
+            transparent);
+        background-size: 3rem 3rem;
+        background-position: -1rem -1rem;
+        background: linear-gradient(180deg, rgba(0, 255, 51, 0) 50%, #00ff33 300%);
+          border-bottom: 2px solid #00ff33;
       .reader {
         min-height: 200px;
         width: 60vw;

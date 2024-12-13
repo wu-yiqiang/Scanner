@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import Dialog from './Dialog.vue'
+import Dialog from './Dialog2.vue'
 import SvgIcon from './SvgIcon.vue'
 import Toast from './Toast/index.ts'
 const emit = defineEmits(['update:visible'])

@@ -1,63 +1,56 @@
 <template>
-  <div to="body" v-if="open" class="Dialog" @click.stop="open = false">
-    <div class="content-box">
+  <Teleport v-if="open" to="body">
+    <dialog class="CustomDialog">
       <slot />
-    </div>
-  </div>
+    </dialog>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue'
-const emit = defineEmits(['update:visible'])
+import { computed, defineEmits } from 'vue'
+const emit = defineEmits(['update:visible']);
 const props = defineProps({
   visible: {
-    require: true,
     type: Boolean,
-    default: false
+    required: true,
+    default: false,
   },
-})
-
+  closable: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
+});
 const open = computed({
   get() {
-    return props?.visible
+    return props.visible;
   },
   set(value) {
-    emit('update:visible', value)
+    emit('update:visible', value);
   },
-})
-
+});
 </script>
-
-<style lang="scss" scoped>
-@mixin noScrollBar {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-    };
+<style scoped lang="scss">
+.CustomDialog {
+  position: absolute;
+  z-index: 99999999999 !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-content: center;
+  width: 88%;
+  animation: scale-up-center-open 0.2s ease-in both;
+  border-radius: 4px;
+  border: none;
 }
-.Dialog {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .content-box {
-    max-width: 90%;
-    max-height: 35%;
-    overflow: scroll;
-    padding: 3px;
-    color: #5a5757;
-    background-color: #f1ebeb;
-    border-radius: 6px;
-    font-size: 16px;
-    border: 1px solid rgb(243, 238, 238);
-    @include noScrollBar();
+
+@keyframes scale-up-center-open {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 </style>

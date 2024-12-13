@@ -14,7 +14,6 @@
       <SvgIcon name="qrcode" color="#fff" size="40px" />
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
-    <History v-model:visible="show" :list="historyRecords" />
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
   </div>
 </template>
@@ -23,15 +22,12 @@
 import ScannerContents from './ScannerContents.vue'
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
-import History from './History.vue'
 import SvgIcon from './SvgIcon.vue'
 let html5QrCode = reactive<any>(null)
 let historyRecords = reactive<any>([])
 let isShow = ref(false)
-let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
-let itemShow = ref(false)
 let devicesInfo = ref('')
 onMounted(() => {
   getCameras()
@@ -69,8 +65,7 @@ const start = () => {
       (decodedText: string, decodedResult: string) => {
         if (!historyRecords.includes(decodedText))
           contents.value = decodedText
-          historyRecords.push(decodedText)
-        if (!visible.value && !show.value) visible.value = true
+          if (!visible.value) visible.value = true
       }
     )
     .catch((err: string) => {
@@ -93,10 +88,6 @@ const stop = () => {
   }
 }
 
-const openHistoryRecord = () => {
-  if (!Boolean(historyRecords.length)) return
-  show.value = true
-}
 </script>
 
 <style lang="scss" scoped>

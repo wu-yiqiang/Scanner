@@ -1,7 +1,7 @@
 <template>
   <div class="Scanner">
     <div class="logo-box">
-      <SvgIcon name="qrcode" color="#fff" size="40px" />
+      <SvgIcon name="logo" color="#fff" size="40px" />
     </div>
     <div class="scan">
       <div class="border">
@@ -15,22 +15,24 @@
       <SvgIcon name="photo-camera" color="#fff" size="40px" />
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
+    <HistoryContents v-model:open="show" title="扫码结果" :lists="contentLists" />
   </div>
   <!-- <demo  /> -->
 </template>
 
 <script setup lang="ts">
-import demo from './demo.vue'
 import ScannerContents from './ScannerContents.vue'
+import HistoryContents from './HistoryContents.vue'
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import Toast from './Toast/index.ts'
 import SvgIcon from './SvgIcon.vue'
 let html5QrCode = reactive<any>(null)
 let historyRecords = reactive<any>([])
-let isShow = ref(false)
+let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
+let contentLists = ref([])
 let devicesInfo = ref('')
 onMounted(() => {
   getCameras()
@@ -44,7 +46,6 @@ const getCameras = () => {
   Html5Qrcode.getCameras()
     .then((devices) => {
       if (devices && devices.length) {
-        isShow.value = true
         html5QrCode = new Html5Qrcode('reader')
         // start开始扫描
         start()
@@ -65,8 +66,12 @@ const start = () => {
       },
       (decodedText: string, decodedResult: string) => {
         if (!historyRecords.includes(decodedText))
-          contents.value = decodedText
-          if (!visible.value) visible.value = true
+          if (contents.value != decodedText) {
+            contents.value = decodedText
+            if (!visible.value) visible.value = true
+          }
+          if (!(contentLists.value.some(item => item == decodedText))) contentLists.value.push(decodedText)
+
       }
     )
     .catch((err: string) => {
@@ -86,7 +91,11 @@ const stop = () => {
       })
   }
 }
+const openHistoryRecord = () => {
+  if (!contentLists.value?.length) return
+  show.value = true
 
+}
 </script>
 
 <style lang="scss" scoped>
@@ -123,14 +132,13 @@ $-scanner-color: rgba(255, 165, 0, 1);
         linear-gradient(to bottom, $-scanner-color, $-scanner-color) left bottom no-repeat,
         linear-gradient(to left, $-scanner-color, $-scanner-color) right bottom no-repeat,
         linear-gradient(to left, $-scanner-color, $-scanner-color) right bottom no-repeat;
-      background-size: 4px 30px, 30px 3px, 4px 30px, 30px 4px;
+      background-size: 4px 30px, 30px 4px, 4px 30px, 30px 4px;
       border-radius: 4px;
       padding: 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-
       .reader {
         min-height: 200px;
         width: 60vw;
@@ -141,12 +149,12 @@ $-scanner-color: rgba(255, 165, 0, 1);
 
       .line {
         position: absolute;
-        width: 60%;
+        width: 70%;
         height: 4px;
         border-radius: 2px;
         background-color: $-scanner-color;
         z-index: 99999999999;
-        animation: scan 1.5s ease-in both;
+        animation: scan 1.5s ease-in-out both;
         animation-direction: alternate;
         animation-iteration-count: infinite;
         box-shadow: 0px 0px 120px 20px rgba(255, 165, 0, .5);

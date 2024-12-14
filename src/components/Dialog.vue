@@ -39,8 +39,7 @@ const open = computed({
   transform: translate(-50%, -50%);
   display: grid;
   place-content: center;
-  width: 88%;
-  animation: scale-up-center-open 0.2s ease-in both;
+  animation: scale-up-center-open 0.3s ease-in both;
   border-radius: 4px;
   border: none;
 }

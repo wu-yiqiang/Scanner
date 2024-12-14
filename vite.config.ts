@@ -37,21 +37,21 @@ export default defineConfig({
         icons: [
           //添加图标，注意路径和图像像素正确，sizes必须和图片的尺寸一致
           {
-            src: 'logo.png',
+            src: 'logo.svg',
             sizes: '500x500',
-            type: 'image/png',
+            type: 'image/svg',
           },
         ],
         screenshots: [
           {
-            src: '111.png',
-            type: 'image/png',
+            src: 'logo.svg',
+            type: 'image/svg',
             sizes: '540x720',
             form_factor: 'narrow',
           },
           {
-            src: '222.png',
-            type: 'image/png',
+            src: 'logo.svg',
+            type: 'image/svg',
             sizes: '720x540',
             form_factor: 'wide',
           },
@@ -75,6 +75,13 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     }),
   ],
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "@/style/index.scss";`,
+  //     },
+  //   },
+  // },
   server: {
     hmr: true,
     host: '0.0.0.0',

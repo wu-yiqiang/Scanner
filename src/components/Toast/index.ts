@@ -2,7 +2,7 @@ import { createVNode, render } from 'vue';
 import Toast from './index.vue';
 
 const div = document.createElement('div');
-const MESSAGE_TIMEOUT = 4000;
+const MESSAGE_TIMEOUT = 2000;
 // 添加到body上
 document.body.appendChild(div);
 

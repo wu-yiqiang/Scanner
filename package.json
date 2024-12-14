@@ -6,7 +6,7 @@
   "author": {
     "name": "Sutter",
     "email": "wu_yiqiang@outlook.com",
-    "url": "https://github.com/wu-yiqiang/vue3-crx/tree/main/vue-scanner"
+    "url": "https://github.com/wu-yiqiang/pwa/tree/main/Scanner"
   },
   "license": "MIT",
   "type": "module",
@@ -16,9 +16,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "qrcode": "^1.5.4",
     "sass": "^1.82.0",
+    "vconsole": "^3.15.1",
     "vh-check": "^2.0.5",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@samrum/vite-plugin-web-extension": "^5.1.1",

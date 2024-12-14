@@ -2,14 +2,10 @@
   <Dialog :visible="visible">
     <div class="card">
       <div v-if="title" class="title">{{ title }}</div>
-      <div class="content-box">
-        <div v-for="(list, index) in lists" :key="index" class="content-item">
-          <div class="contents">{{ list }}</div>
-          <div class="copy" @click="handleCopy(list)">复制</div>
-        </div>
-      </div>
+      <div class="contents">{{ contsnts }}</div>
       <div class="bottom-box">
         <div class="cancel" @click="visible = false">关闭</div>
+        <div class="submit" @click="handleCopy(props?.contsnts)">复制</div>
       </div>
     </div>
   </Dialog>
@@ -17,8 +13,8 @@
 
 <script setup lang='ts'>
 import { computed, defineEmits, ref } from 'vue'
-import Dialog from './Dialog.vue'
-import Toast from './Toast/index.ts'
+import Dialog from '@/components/Dialog.vue'
+import Toast from '@/components/Toast/index.ts'
 const emit = defineEmits(['update:open']);
 const props = defineProps({
   open: {
@@ -26,10 +22,10 @@ const props = defineProps({
     required: true,
     default: false,
   },
-  lists: {
-    type: Array<String>,
+  contsnts: {
+    type: String,
     required: true,
-    default: [],
+    default: "",
   },
   title: {
     type: String,
@@ -54,6 +50,7 @@ function handleCopy(str: string) {
   document.execCommand('copy')
   document.body.removeChild(aux)
   Toast.success('复制成功')
+  visible.value = false
 }
 
 </script>
@@ -62,74 +59,39 @@ function handleCopy(str: string) {
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  background-color: #1e1e1e;
   padding: 10px;
   border-radius: 4px;
-
   min-width: 70vw;
   max-width: 80vw;
-  max-height: 50vh;
 
   .title {
     font-size: 16px;
-    color: #fff;
     display: flex;
     align-items: center;
     justify-content: flex-start;
   }
 
-  .content-box {
-    display: grid;
-    row-gap: 4px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-    }
-
-    ;
-
-    .content-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .contents {
-        padding: 10px;
-        flex: 1;
-        color: #bbb;
-        font-size: 14px;
-        text-align: justify;
-        overflow: hidden;
-        word-break: break-all;
-        word-wrap: break-word;
-      }
-
-      .copy {
-        display: flex;
-        justify-content: flex-end;
-        width: 40px;
-        padding: 4px;
-        font-size: 16px;
-        color: #4a7afe;
-      }
-    }
-
+  .contents {
+    padding: 10px;
+    flex: 1;
+    font-size: 14px;
+    text-align: justify;
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
   }
-
 
   .bottom-box {
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
     column-gap: 10px;
 
-    .cancel {
+    .cancel,
+    .submit {
       padding: 4px;
       font-size: 16px;
       color: #4a7afe;
+      cursor: pointer;
     }
   }
 }

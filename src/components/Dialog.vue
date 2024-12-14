@@ -42,6 +42,7 @@ const open = computed({
   animation: scale-up-center-open 0.3s ease-in both;
   border-radius: 4px;
   border: none;
+  background-color: var(--dialog-background-color);
 }
 
 @keyframes scale-up-center-open {

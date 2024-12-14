@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import Scanner from '@/components/Scanner.vue'
+import Scanner from '@/pages/scanner/index.vue'
 </script>
 
 <style scoped>

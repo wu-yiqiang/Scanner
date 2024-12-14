@@ -26,7 +26,7 @@ const props = defineProps({
   // 消息停留时间：0 表示需要手动关闭 毫秒
   duration: {
     type: Number,
-    default: 4000,
+    default: 2000,
   },
 })
 type MessageStyle = {
@@ -106,8 +106,7 @@ onMounted(() => {
 }
 
 .Toast {
-  min-width: 300px;
-  // max-width: 560px;
+  min-width: 260px;
   padding: 8px 14px;
   position: fixed;
   z-index: 9999;

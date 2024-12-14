@@ -1,11 +1,16 @@
 <template>
   <div class="App">
-    <Scanner />
+    <router-view v-slot="{ Component }">
+      <transition name="fade">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
 <script setup lang="ts">
-import Scanner from '@/components/Scanner.vue'
+import router from '@/router';
+
 </script>
 
 <style scoped>

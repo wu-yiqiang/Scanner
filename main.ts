@@ -1,8 +1,11 @@
 import { createApp } from 'vue'
-import '@/style.css'
+import router from '@/router/index'
+import '@/style/index.scss'
 import 'amfe-flexible'
 import 'virtual:svg-icons-register'
 import App from './App.vue'
+import VConsole from 'vconsole'
 import vhCheck from 'vh-check'
 vhCheck()
-createApp(App).mount('#app')
+new VConsole()
+createApp(App).use(router).mount('#app')

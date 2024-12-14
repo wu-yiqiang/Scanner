@@ -24,8 +24,8 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      injectRegister: 'auto',
-      registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
+      // injectRegister: 'auto',
+      // registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
       manifest: {
         name: 'Scanner', // 项目名
         id: 'Scanner',
@@ -37,30 +37,60 @@ export default defineConfig({
         icons: [
           //添加图标，注意路径和图像像素正确，sizes必须和图片的尺寸一致
           {
-            src: 'logo.svg',
-            sizes: '500x500',
-            type: 'image/svg',
+            src: 'logo-48.png',
+            sizes: '48x48',
+            type: 'image/png',
           },
         ],
         screenshots: [
           {
-            src: 'logo.svg',
-            type: 'image/svg',
-            sizes: '540x720',
+            src: 'logo-48.png',
+            sizes: '48x48',
+            type: 'image/png',
             form_factor: 'narrow',
           },
           {
-            src: 'logo.svg',
-            type: 'image/svg',
-            sizes: '720x540',
+            src: 'logo-72.png',
+            sizes: '72x72',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+          {
+            src: 'logo-96.png',
+            sizes: '96x96',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+          {
+            src: 'logo-114.png',
+            sizes: '114x114',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+          {
+            src: 'logo-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+          {
+            src: 'logo-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+          {
+            src: 'logo-1024.png',
+            sizes: '1024x1024',
+            type: 'image/png',
             form_factor: 'wide',
           },
         ],
       },
       workbox: {
-        // globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}'],		// 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
-        clientsClaim: true,
-        skipWaiting: true,
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],		// 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
+        // clientsClaim: true,
+        // skipWaiting: true,
       },
       devOptions: {
         enabled: true,

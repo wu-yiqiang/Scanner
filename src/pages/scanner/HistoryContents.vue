@@ -64,7 +64,6 @@ function handleCopy(str: string) {
   align-content: space-between;
   padding: 10px;
   border-radius: 4px;
-
   min-width: 70vw;
   max-width: 80vw;
   max-height: 50vh;
@@ -74,6 +73,7 @@ function handleCopy(str: string) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    color: var(--text-color);
   }
 
   .content-box {
@@ -82,7 +82,7 @@ function handleCopy(str: string) {
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
-
+    color: var(--text-color-secondary);
     &::-webkit-scrollbar {
       width: 0;
       height: 0;

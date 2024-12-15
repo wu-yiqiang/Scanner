@@ -1,6 +1,6 @@
 <template>
   <Teleport v-if="open" to="body">
-    <dialog class="CustomDialog">
+    <dialog :show="open" :modal="true" :aria-modal="true" >
       <slot />
     </dialog>
   </Teleport>
@@ -31,9 +31,8 @@ const open = computed({
 });
 </script>
 <style scoped lang="scss">
-.CustomDialog {
-  position: absolute;
-  z-index: 99999999999 !important;
+dialog {
+  // z-index: 99999999999 !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

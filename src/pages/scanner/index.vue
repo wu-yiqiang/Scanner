@@ -15,11 +15,18 @@
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
     <HistoryContents v-model:open="show" title="扫码结果" :lists="contentLists" />
+    <Dialog1 :is-show-dialog="true">
+      11121
+    </Dialog1>
+    <Dialog1 :is-show-dialog="true">
+      asdas1
+    </Dialog1>
   </div>
   <!-- <demo  /> -->
 </template>
 
 <script setup lang="ts">
+import Dialog1 from '@/components/Dialog1.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'

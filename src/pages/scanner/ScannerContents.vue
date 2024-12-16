@@ -63,14 +63,14 @@ function handleCopy(str: string) {
   border-radius: 4px;
   min-width: 70vw;
   max-width: 80vw;
-
+  height: 100px;
   .title {
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    color: var(--text-color);
   }
-
   .contents {
     padding: 10px;
     flex: 1;
@@ -79,13 +79,13 @@ function handleCopy(str: string) {
     overflow: hidden;
     word-break: break-all;
     word-wrap: break-word;
+    color: var(--text-color-secondary);
   }
 
   .bottom-box {
     display: flex;
     justify-content: flex-end;
     column-gap: 10px;
-
     .cancel,
     .submit {
       padding: 4px;

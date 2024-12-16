@@ -73,6 +73,7 @@ function handleCopy(str: string) {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    color: var(--text-color);
   }
 
   .content-box {
@@ -81,7 +82,7 @@ function handleCopy(str: string) {
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
-
+    color: var(--text-color-secondary);
     &::-webkit-scrollbar {
       width: 0;
       height: 0;

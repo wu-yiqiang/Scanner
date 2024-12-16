@@ -1,5 +1,5 @@
 <template>
-  <Dialog :visible="visible">
+  <Dialog v-model:visible="visible">
     <div class="card">
       <div v-if="title" class="title">{{ title }}</div>
       <div class="content-box">
@@ -64,7 +64,6 @@ function handleCopy(str: string) {
   align-content: space-between;
   padding: 10px;
   border-radius: 4px;
-
   min-width: 70vw;
   max-width: 80vw;
   max-height: 50vh;

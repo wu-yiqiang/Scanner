@@ -20,7 +20,6 @@
 
 <script setup lang='ts'>
 import QRCode from 'qrcode'
-import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import { ref } from 'vue'

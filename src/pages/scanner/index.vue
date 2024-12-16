@@ -163,7 +163,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
         height: 4px;
         border-radius: 2px;
         background-color: $-scanner-color;
-        z-index: 99999999999;
+        z-index: 999999;
         animation: scan 1.5s ease-in-out both;
         animation-direction: alternate;
         animation-iteration-count: infinite;
@@ -174,7 +174,6 @@ $-scanner-color: rgba(255, 165, 0, 1);
         0% {
           top: 25%;
         }
-
         100% {
           top: 75%;
         }

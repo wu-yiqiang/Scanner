@@ -1,73 +1,31 @@
 <template>
   <transition name="fade">
-    <div class="Toast" :style="MESSAGE_STYLE[props.type]" v-if="isShow">
+    <div class="Toast" :class="type" v-if="isShow">
       <span class="text">{{ props.text }}</span>
-      <div v-if="!duration" class="icon" @click="handleClose">
-        <SvgIcon name="closure" size="18px" />
-      </div>
+      <!-- <div class="icon" @click="handleClose" /> -->
     </div>
   </transition>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue"
 const isShow = ref<boolean>(false)
 const props = defineProps({
-  // 消息文本
   text: {
     type: String,
-    default: '',
+    default: ""
   },
   // 消息类型： "info" | "success" | "warn" | "error"
   type: {
     type: String,
-    default: 'warn',
+    default: "success"
   },
-  // 消息停留时间：0 表示需要手动关闭 毫秒
+  // 消息停留时间：0 表示需要手动关闭
   duration: {
     type: Number,
-    default: 2000,
-  },
+    default: 4000
+  }
 })
-type MessageStyle = {
-  icon: string
-  color: string
-  backgroundColor: string
-  borderColor: string
-}
-
-type MessageStyleKeys = 'info' | 'success' | 'warn' | 'error' // 支持的类型
-
-interface IMessageStyle {
-  [index in MessageStyleKeys]: MessageStyle
-  [index: string]: MessageStyle
-}
-const MESSAGE_STYLE: IMessageStyle = {
-  warn: {
-    icon: 'icon-warn-fill',
-    color: '#FFFFFF',
-    backgroundColor: '#FF7A00',
-    borderColor: '#FF7A00',
-  },
-  error: {
-    icon: 'icon-error-fill',
-    color: '#FFFFFF',
-    backgroundColor: '#CB0000',
-    borderColor: '#CB0000',
-  },
-  success: {
-    icon: 'icon-success-fill',
-    color: '#FFFFFF',
-    backgroundColor: '#27682C',
-    borderColor: '#27682C',
-  },
-  info: {
-    icon: 'icon-info-fill',
-    color: '#FFFFFF',
-    backgroundColor: '#165DFF',
-    borderColor: '#165DFF',
-  },
-}
 
 const handleClose = () => {
   isShow.value = false
@@ -75,22 +33,22 @@ const handleClose = () => {
 
 onMounted(() => {
   isShow.value = true
-  console.log('duration', props?.duration)
   if (props.duration) {
     setTimeout(() => {
       handleClose()
     }, props.duration)
   }
+
 })
 </script>
 
 <style scoped lang="scss">
 .fade-enter-active {
-  animation: fade 0.5s;
+  animation: fade .5s;
 }
 
 .fade-leave-active {
-  animation: fade 0.5s reverse;
+  animation: fade .5s reverse;
 }
 
 /* 定义帧动画 */
@@ -109,7 +67,7 @@ onMounted(() => {
   min-width: 260px;
   padding: 8px 14px;
   position: fixed;
-  z-index: 9999;
+  z-index: 999999999999999999999;
   left: 50%;
   transform: translateX(-50%);
   top: 20px;
@@ -118,24 +76,59 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   column-gap: 10px;
+
   .text {
     flex: 1;
-    font-family: Inter;
+    color: #FFFFFF;
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
     display: grid;
     place-content: center;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-  }
-  .icon {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
+      overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+      }
+
+      .icon {
+        display: inline-flex;
+          justify-content: center;
+          align-items: center;
+        cursor: pointer;
+        display: inline-block;
+        width: 14px;
+        height: 2px;
+        transform: rotate(45deg);
+        background-color: #fff;
+        border-radius: 2px;
+
+        // &::after {
+        //   content: '';
+        //   display: block;
+        //   width: 14px;
+        //   height: 2px;
+        //   border-radius: 2px;
+        //   background-color: #fff;
+        //   transform: rotate(-90deg);
+        //   cursor: pointer;
+        // }
+      }
+      }
+
+      .warn {
+        background-color: #FF7A00;
+      }
+
+      .error {
+        background-color: #CB0000;
+      }
+
+      .success {
+        background-color: #27682C;
+      }
+
+      .info {
+        background-color: #165DFF;
 }
 </style>

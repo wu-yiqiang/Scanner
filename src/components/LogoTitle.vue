@@ -3,10 +3,6 @@
     <SvgIcon name="logo" color="#fff" size="40px" />
     <span class="title">{{ title }}</span>
   </section>
-  <!-- <div class="logo-title">
-    <SvgIcon name="logo" color="#fff" size="40px" />
-    <span class="title">QR Code</span>
-  </div> -->
 </template>
 
 <script setup lang='ts'>

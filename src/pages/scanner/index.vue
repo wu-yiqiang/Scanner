@@ -54,7 +54,7 @@ const getCameras = () => {
       }
     })
     .catch((err) => {
-      Toast.error('获取设备信息失败')
+      Toast.error(`获取设备信息失败`)
     })
 }
 const start = () => {

@@ -63,7 +63,7 @@ const handleDownload = (base64: string) => {
       justify-content: space-evenly;
 
       &:empty::before {
-        content: "暂未生成二维码";
+        content: "请输入内容生成二维码";
         font-size: 18px;
       }
 

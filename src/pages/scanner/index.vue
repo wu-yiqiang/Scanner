@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import Dialog1 from '@/components/Dialog1.vue'
+import Dialog1 from '@/components/Dialog.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'

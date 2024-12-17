@@ -1,5 +1,5 @@
 <template>
-  <Dialog :visible="visible">
+  <Dialog v-model:visible="visible">
     <div class="card">
       <div v-if="title" class="title">{{ title }}</div>
       <div class="contents">{{ contsnts }}</div>
@@ -59,11 +59,11 @@ function handleCopy(str: string) {
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  padding: 10px;
   border-radius: 4px;
   min-width: 70vw;
   max-width: 80vw;
-  height: 100px;
+  min-height: 60px;
+  max-height: 50vh;
   .title {
     font-size: 16px;
     display: flex;
@@ -76,7 +76,7 @@ function handleCopy(str: string) {
     flex: 1;
     font-size: 14px;
     text-align: justify;
-    overflow: hidden;
+    overflow: auto;
     word-break: break-all;
     word-wrap: break-word;
     color: var(--text-color-secondary);

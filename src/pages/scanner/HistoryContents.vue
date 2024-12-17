@@ -62,12 +62,11 @@ function handleCopy(str: string) {
   display: flex;
   flex-direction: column;
   align-content: space-between;
-  padding: 10px;
   border-radius: 4px;
   min-width: 70vw;
   max-width: 80vw;
+  min-height: 60px;
   max-height: 50vh;
-
   .title {
     font-size: 16px;
     display: flex;

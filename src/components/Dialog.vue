@@ -1,26 +1,16 @@
 <template>
-  <Teleport v-if="open" to="body">
-    <div class="Modal">
-      <div class="Dialog">
-        <slot />
-      </div>
-    </div>
-  </Teleport>
+  <dialog v-if="open" class="Dialog" id="dialogBox" ref="dialogBoxRef" aria-modal="true">
+    <slot />
+  </dialog>
 </template>
 
-<script setup lang="ts">
-import { computed, defineEmits } from 'vue'
+<script lang="ts" setup>
+import { nextTick, ref, watch, onMounted, computed } from 'vue'
 const emit = defineEmits(['update:visible']);
+const dialogBoxRef = ref();
 const props = defineProps({
   visible: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  closable: {
-    type: Boolean,
-    required: true,
-    default: true,
+    type: Boolean
   },
 });
 const open = computed({
@@ -30,40 +20,40 @@ const open = computed({
   set(value) {
     emit('update:visible', value);
   },
-});
+})
+watch(() => open?.value, (newVal) => {
+  if (newVal) {
+    console.log("sds")
+    nextTick(() => {
+      dialogBoxRef.value?.showModal();
+    })
+  }
+}, {
+  immediate: true
+} )
 </script>
-<style scoped lang="scss">
-.Modal {
-  position: fixed;
-  z-index: 99999999999 !important;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(44, 44, 44, 0.5);
-  .Dialog {
-    position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: grid;
-      place-content: center;
-      animation: scale-up-center-open 0.3s ease-in both;
-      border-radius: 4px;
-      border: none;
-      background-color: var(--dialog-background-color);
-    }
+<style lang="scss" scoped>
+dialog {
+  top: 50%;
+  left: 50%;
+  padding: 10px;
+  transform: translate(-50%, -50%) scale(0);
+  animation: scale-up-center-open 0.3s ease-in both;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  background-color: var(--dialog-background-color);
+  &::backdrop {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
 
-    @keyframes scale-up-center-open {
-      0% {
-        transform: translate(-50%, -50%) scale(0);
-      }
-
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
+@keyframes scale-up-center-open {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 </style>

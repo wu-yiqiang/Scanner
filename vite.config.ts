@@ -10,6 +10,20 @@ const pathResolve = (dir: string): string => {
   return resolve(__dirname, '.', dir)
 }
 
+const getCache = ({ name, pattern }: any) => ({
+  urlPattern: pattern,
+  handler: 'CacheFirst' as const,
+  options: {
+    cacheName: name,
+    expiration: {
+      maxEntries: 500,
+      maxAgeSeconds: 60 * 60 * 24 * 365 * 2 // 2 years
+    },
+    cacheableResponse: {
+      statuses: [200]
+    }
+  }
+})
 export default defineConfig({
   base: './',
   resolve: {
@@ -86,6 +100,17 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'], // 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
         // clientsClaim: true,
         // skipWaiting: true,
+        runtimeCaching: [
+          // 配置自定义运行时缓存
+          getCache({
+            pattern: /^https:\/\/192.168.1.107:443/,
+            name: 'local-upload',
+          }),
+          getCache({
+            pattern: /^https:\/\/192.168.1.107:443/,
+            name: 'webapp',
+          }),
+        ],
       },
       devOptions: {
         enabled: false,

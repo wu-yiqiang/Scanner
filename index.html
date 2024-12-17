@@ -20,6 +20,30 @@
   </head>
   <body>
     <div id="app"></div>
+<script setup lang="ts">
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault()
+    window.deferredPrompt = e
+  })
+
+  // 若浏览器支持，则这里会出发安装操作
+  const openAddFlow = () => {
+    try {
+      window.deferredPrompt.prompt()
+      window.deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          // showAddToDesktop.value = false
+          localStorage.setItem('addDesktop', true)
+        } else {
+          console.log('User dismissed the A2HS prompt')
+        }
+        window.deferredPrompt = null
+      })
+    } catch {
+      //
+    }
+  }
+</script>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>

@@ -24,15 +24,8 @@ import LogoTitle from '@/components/LogoTitle.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import { ref } from 'vue'
 import { base64ToBlob } from '@/utils/index'
-const props = defineProps({
-  title: {
-    required: false,
-    type: String,
-    defalt: ""
-  }
-})
 let contents = ref("")
-let code = ref(null)
+let code = ref("")
 const handleQRGenerator = async (content: string) => {
   if (!content) return
   code.value = await QRCode.toDataURL(content);

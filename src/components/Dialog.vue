@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, watch, onMounted, computed } from 'vue'
+import { nextTick, ref, watch, computed } from 'vue'
 const emit = defineEmits(['update:visible']);
 const dialogBoxRef = ref();
 const props = defineProps({

@@ -1,9 +1,6 @@
 import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import webExtension from '@samrum/vite-plugin-web-extension'
-import viteCompression from 'vite-plugin-compression'
 import svgLoader from 'vite-svg-loader'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -22,16 +19,14 @@ export default defineConfig({
     },
   },
   plugins: [
-    vue(),
     VitePWA({
       // injectRegister: 'auto',
-      // registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
+      registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
       manifest: {
-        name: 'Scanner', // 项目名
-        id: 'Scanner',
+        name: 'Scanner',
         short_name: 'Scanner',
         description: '扫码器',
-        theme_color: '#4DBA87',
+        theme_color: '#000000',
         background_color: '#000000', // 首次在移动设备上启动应用时，启动画面会使用 background_color 属性。
         display: 'fullscreen', // 您可以自定义应用启动时显示的浏览器界面。例如，您可以隐藏地址栏和浏览器界面元素
         icons: [
@@ -88,14 +83,15 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],		// 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'], // 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
         // clientsClaim: true,
         // skipWaiting: true,
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
     }),
+    vue(),
     basicSsl(),
     svgLoader(),
     createSvgIconsPlugin({
@@ -119,36 +115,19 @@ export default defineConfig({
     https: true,
   },
   build: {
-    // 最终构建的浏览器兼容目标
     target: 'es2015',
-    // 是否自动注入module preload的polyfill
-    polyfillModulePreload: true,
-    // 指定混淆器
     minify: 'esbuild',
-    // 启用css代码拆分
     cssCodeSplit: true,
     // 允许用户为css的压缩设置一个不同的浏览器target, 与build esbuild一致
     cssTarget: '',
-    // 清空输入文件夹
     emptyOutDir: false,
-    // 取消计算文件大小，加快打包速度
     reportCompressedSize: false,
     // 启用压缩大小报告,
     // brotliSize: false,
-    // chunk大小警告的限制
     chunkSizeWarningLimit: 500,
-    // 取消sourceMap， 加快打包速度,
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules'))
-            return id
-              .toString()
-              .split('node_modules')[1]
-              .split('/')[0]
-              .toString()
-        },
         entryFileNames: 'js/[name].hash.js',
         chunkFileNames: 'js/[name].hash.js',
         assetFileNames: (assetInfo) => {

@@ -15,34 +15,24 @@
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
     <HistoryContents v-model:open="show" title="扫码结果" :lists="contentLists" />
-    <Dialog1 :is-show-dialog="true">
-      11121
-    </Dialog1>
-    <Dialog1 :is-show-dialog="true">
-      asdas1
-    </Dialog1>
   </div>
-  <!-- <demo  /> -->
 </template>
 
 <script setup lang="ts">
-import Dialog1 from '@/components/Dialog.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'
 import ScannerContents from './ScannerContents.vue'
 import HistoryContents from './HistoryContents.vue'
 import { ref, onMounted, reactive, onUnmounted } from 'vue'
-import { Html5Qrcode, Html5QrcodeScanner } from 'html5-qrcode'
+import { Html5Qrcode } from 'html5-qrcode'
 import router from '@/router/index'
 let html5QrCode = reactive<any>(null)
 let historyRecords = reactive<any>([])
 let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
-let contentLists = ref([])
-let lightOpen = ref(false)
-let formState = ref()
+let contentLists = ref(<any>[])
 let devicesInfo = ref('')
 onMounted(() => {
   getCameras()
@@ -61,6 +51,7 @@ const getCameras = () => {
       }
     })
     .catch((err) => {
+      console.log("error", err)
       Toast.error(`获取设备信息失败`)
     })
 }
@@ -79,8 +70,8 @@ const start = () => {
             contents.value = decodedText
             if (!visible.value) visible.value = true
           }
-        if (!(contentLists.value.some(item => item == decodedText))) contentLists.value.push(decodedText)
-
+        if (!(contentLists.value.some((item: string) => item == decodedText))) contentLists.value.push(decodedText)
+        console.log(decodedResult)
       }
     )
     .catch((err: string) => {
@@ -93,6 +84,7 @@ const stop = () => {
     html5QrCode
       .stop()
       .then((ignore: string) => {
+        console.log(ignore)
         Toast.error(`QR Code scanning stopped.`)
       })
       .catch((err: string) => {
@@ -105,19 +97,10 @@ const openHistoryRecord = () => {
   if (!contentLists.value?.length) return
   show.value = true
 }
-const openFlash = () => { }
 const toQrCode = () => {
   router.push('/qrcode')
 }
 const handleUploadImg = () => {
-  // const f: any = document.getElementById("file");
-  // f?.click();
-  // f.onchange = async function (e: any) {
-  //   const qrCodeReader = new Html5Qrcode(false); // false 表示不使用摄像头
-  //   const file = e.target.files[0];
-  //   const data = await qrCodeReader.value.scan(file)
-  //   console.log("dd", data)
-  // };
 }
 </script>
 

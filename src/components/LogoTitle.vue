@@ -1,7 +1,7 @@
 <template>
   <section class='LogoTitle'>
     <SvgIcon name="logo" color="#fff" size="40px" />
-    <span class="title">{{ title }}</span>
+    <span class="title">{{ props?.title }}</span>
   </section>
 </template>
 

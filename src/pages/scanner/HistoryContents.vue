@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineEmits } from 'vue'
+import { computed } from 'vue'
 import Dialog from '@/components/Dialog.vue'
 import Toast from '@/components/Toast/index.ts'
 const emit = defineEmits(['update:open']);

@@ -24,39 +24,41 @@ import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'
 import ScannerContents from './ScannerContents.vue'
 import HistoryContents from './HistoryContents.vue'
-import { ref, onMounted, reactive, onUnmounted } from 'vue'
+import { ref, onMounted, reactive, onUnmounted, onBeforeUnmount, watch } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import router from '@/router/index'
-let html5QrCode = reactive<any>(null)
-let historyRecords = reactive<any>([])
+import { onBeforeRouteLeave } from 'vue-router'
+import { nextTick } from 'process'
+let html5QrCode = ref<any>(null)
+let historyRecords = ref<any>([])
 let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
 let devicesInfo = ref('')
+let count = ref(0)
+// let startTime = ref(new Date())
 onMounted(() => {
   getCameras()
 })
 
-onUnmounted(() => {
+onBeforeRouteLeave(() => {
   stop()
 })
 
-const getCameras = () => {
-  Html5Qrcode.getCameras()
-    .then((devices) => {
-      if (devices && devices.length) {
-        html5QrCode = new Html5Qrcode('reader')
-        start()
-      }
-    })
+const getCameras = async () => {
+  const devices = await Html5Qrcode.getCameras()
     .catch((err) => {
       console.log("error", err)
       Toast.error(`获取设备信息失败`)
     })
+  if (devices && devices.length) {
+    html5QrCode.value = new Html5Qrcode('reader')
+    start()
+  }
 }
 const start = () => {
-  html5QrCode
+  html5QrCode.value
     ?.start(
       { facingMode: 'environment' },
       {
@@ -65,7 +67,7 @@ const start = () => {
         // scannable, rest shaded.
       },
       (decodedText: string, decodedResult: string) => {
-        if (!historyRecords.includes(decodedText))
+        if (!historyRecords.value.includes(decodedText))
           if (contents.value != decodedText) {
             contents.value = decodedText
             if (!visible.value) visible.value = true
@@ -79,13 +81,12 @@ const start = () => {
     })
 }
 
-const stop = () => {
-  if (devicesInfo?.value) {
-    html5QrCode
+const stop = async () => {
+  if (html5QrCode?.value) {
+    await html5QrCode.value
       .stop()
       .then((ignore: string) => {
         console.log(ignore)
-        Toast.error(`QR Code scanning stopped.`)
       })
       .catch((err: string) => {
         Toast.error(`Unable to stop scanning.\n${err}`)

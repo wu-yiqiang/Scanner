@@ -29,12 +29,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
-      '@/': resolve(__dirname, 'src'),
     },
   },
   plugins: [
     VitePWA({
-      // injectRegister: 'auto',
       registerType: 'autoUpdate',
       mode: 'production',
       manifest: {
@@ -98,8 +96,6 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],
-        // clientsClaim: true,
-        // skipWaiting: true,
         runtimeCaching: [
           getCache({
             pattern: /^https:\/\/192.168.1.107:443/,
@@ -126,7 +122,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        // api: 'modern-compiler',
         silenceDeprecations: ['legacy-js-api', 'color-functions'],
       },
     },

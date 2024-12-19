@@ -25,7 +25,7 @@ const getCache = ({ name, pattern }: any) => ({
   }
 })
 export default defineConfig({
-  base: './',
+  // base: './',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -34,81 +34,32 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      mode: 'production',
+      includeAssets: ['favicon.ico'],
       manifest: {
         name: 'Scanner',
         short_name: 'Scanner',
-        description: '扫码器',
-        theme_color: '#000000',
-        background_color: '#000000',
-        display: 'fullscreen',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+        display: 'standalone',
+        start_url: '/',
         icons: [
           {
-            src: 'logo-48.png',
-            sizes: '48x48',
-            type: 'image/png',
-          },
-        ],
-        screenshots: [
-          {
-            src: 'logo-48.png',
-            sizes: '48x48',
-            type: 'image/png',
-            form_factor: 'narrow',
-          },
-          {
-            src: 'logo-72.png',
-            sizes: '72x72',
-            type: 'image/png',
-            form_factor: 'wide',
-          },
-          {
-            src: 'logo-96.png',
-            sizes: '96x96',
-            type: 'image/png',
-            form_factor: 'wide',
-          },
-          {
-            src: 'logo-114.png',
-            sizes: '114x114',
-            type: 'image/png',
-            form_factor: 'wide',
-          },
-          {
-            src: 'logo-192.png',
+            src: '/src/assets/images/logo-192.png',
             sizes: '192x192',
             type: 'image/png',
-            form_factor: 'wide',
           },
           {
-            src: 'logo-512.png',
+            src: '/src/assets/images/logo-512.png',
             sizes: '512x512',
             type: 'image/png',
-            form_factor: 'wide',
-          },
-          {
-            src: 'logo-1024.png',
-            sizes: '1024x1024',
-            type: 'image/png',
-            form_factor: 'wide',
           },
         ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],
-        runtimeCaching: [
-          getCache({
-            pattern: /^https:\/\/192.168.1.107:443/,
-            name: 'local-upload',
-          }),
-          getCache({
-            pattern: /^https:\/\/192.168.1.107:443/,
-            name: 'webapp',
-          }),
-        ],
       },
       devOptions: {
-        enabled: false,
+        enabled: true,
       },
     }),
     vue(),

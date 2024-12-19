@@ -1,48 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Scanner</title>
-    <link rel="icon" href="./logo.svg" type="image/x-icon">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0 user-scalable=no viewport-fit=cover">
-    <!-- 搜索 -->
-    <meta name='description' content="扫码器">
-    <meta name='keywords' content="扫码器, Scanner">
 
-    <!-- web app -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scanner</title>
+  <link rel="icon" href="./logo.svg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0 user-scalable=no viewport-fit=cover">
+  <!-- 搜索 -->
+  <meta name='description' content="扫码器">
+  <meta name='keywords' content="扫码器, Scanner">
 
-    <!-- theme color-->
-    <meta name="theme-color" content="#373737" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
-  </head>
-  <body>
-    <div id="app"></div>
-<script setup lang="ts">
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault()
-    window.deferredPrompt = e
-  })
+  <!-- web app -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
 
-  // 若浏览器支持，则这里会出发安装操作
-  const openAddFlow = () => {
-    try {
-      window.deferredPrompt.prompt()
-      window.deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          // showAddToDesktop.value = false
-          localStorage.setItem('addDesktop', true)
-        } else {
-          console.log('User dismissed the A2HS prompt')
-        }
-        window.deferredPrompt = null
-      })
-    } catch {
-      //
+<body>
+  <div id="app"></div>
+  <script>
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log("sds")
+      e.preventDefault()
+      window.deferredPrompt = e
+    })
+    const openAddFlow = () => {
+      try {
+        window.deferredPrompt.prompt()
+        window.deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            // showAddToDesktop.value = false
+            localStorage.setItem('addDesktop', true)
+          } else {
+            console.log('User dismissed the A2HS prompt')
+          }
+          window.deferredPrompt = null
+        })
+      } catch {
+        //
+      }
     }
-  }
-</script>
-    <script type="module" src="./main.ts"></script>
-  </body>
+  </script>
+  <script type="module" src="./main.ts"></script>
+</body>
+
 </html>

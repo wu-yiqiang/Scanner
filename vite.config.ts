@@ -35,16 +35,16 @@ export default defineConfig({
   plugins: [
     VitePWA({
       // injectRegister: 'auto',
-      registerType: 'autoUpdate', // 如果此项值为autoUpdate，则为自动给更新
+      registerType: 'autoUpdate',
+      mode: 'production',
       manifest: {
         name: 'Scanner',
         short_name: 'Scanner',
         description: '扫码器',
         theme_color: '#000000',
-        background_color: '#000000', // 首次在移动设备上启动应用时，启动画面会使用 background_color 属性。
-        display: 'fullscreen', // 您可以自定义应用启动时显示的浏览器界面。例如，您可以隐藏地址栏和浏览器界面元素
+        background_color: '#000000',
+        display: 'fullscreen',
         icons: [
-          //添加图标，注意路径和图像像素正确，sizes必须和图片的尺寸一致
           {
             src: 'logo-48.png',
             sizes: '48x48',
@@ -97,11 +97,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'], // 缓存相关静态资源，这个放开会导致页面html被缓存，谨慎使用
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],
         // clientsClaim: true,
         // skipWaiting: true,
         runtimeCaching: [
-          // 配置自定义运行时缓存
           getCache({
             pattern: /^https:\/\/192.168.1.107:443/,
             name: 'local-upload',
@@ -120,19 +119,18 @@ export default defineConfig({
     basicSsl(),
     svgLoader(),
     createSvgIconsPlugin({
-      // 指定需要缓存的图标文件夹
       iconDirs: [pathResolve('src/assets/svg/')],
-      // 指定symbolId格式
       symbolId: 'icon-[dir]-[name]',
     }),
   ],
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `@import "@/style/index.scss";`,
-  //     },
-  //   },
-  // },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // api: 'modern-compiler',
+        silenceDeprecations: ['legacy-js-api', 'color-functions'],
+      },
+    },
+  },
   server: {
     hmr: true,
     host: '0.0.0.0',
@@ -143,23 +141,19 @@ export default defineConfig({
     target: 'es2015',
     minify: 'esbuild',
     cssCodeSplit: true,
-    // 允许用户为css的压缩设置一个不同的浏览器target, 与build esbuild一致
     cssTarget: '',
-    emptyOutDir: false,
+    emptyOutDir: true,
     reportCompressedSize: false,
-    // 启用压缩大小报告,
-    // brotliSize: false,
     chunkSizeWarningLimit: 500,
     sourcemap: false,
     rollupOptions: {
       output: {
-        entryFileNames: 'js/[name].hash.js',
-        chunkFileNames: 'js/[name].hash.js',
+        entryFileNames: 'js/[name][hash].js',
+        chunkFileNames: 'js/[name][hash].js',
         assetFileNames: (assetInfo) => {
           const fileName = assetInfo.name
-          if (fileName?.endsWith('.svg'))
-            return 'img/svg/[name]-[hash][extname]'
-          return 'css/[name]-[hash][extname]'
+          if (fileName?.endsWith('.css')) return 'css/[name]-[hash][extname]'
+          return 'assets/[ext]/[name][hash].[ext]'
         },
       },
     },

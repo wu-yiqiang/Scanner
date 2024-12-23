@@ -24,19 +24,16 @@ import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'
 import ScannerContents from './ScannerContents.vue'
 import HistoryContents from './HistoryContents.vue'
-import { ref, onMounted, reactive, onUnmounted, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
-import { nextTick } from 'process'
 let html5QrCode = ref<any>(null)
 let historyRecords = ref<any>([])
 let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
-let devicesInfo = ref('')
-let count = ref(0)
 // let startTime = ref(new Date())
 onMounted(() => {
   getCameras()

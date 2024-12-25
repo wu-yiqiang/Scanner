@@ -42,13 +42,9 @@ const visible = computed({
   },
 })
 
-function handleCopy(str: string) {
-  var aux = document.createElement('input')
-  aux.setAttribute('value', str)
-  document.body.appendChild(aux)
-  aux.select()
-  document.execCommand('copy')
-  document.body.removeChild(aux)
+
+const handleCopy = async (text: string) => {
+  await navigator?.clipboard?.writeText(text);
   Toast.success('复制成功')
   visible.value = false
 }

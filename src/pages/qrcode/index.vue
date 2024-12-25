@@ -24,7 +24,7 @@ import LogoTitle from '@/components/LogoTitle.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import { ref } from 'vue'
 import { base64ToBlob } from '@/utils/index'
-let contents = ref("")
+let contents = ref("https://sutter9527.top")
 let code = ref("")
 const handleQRGenerator = async (content: string) => {
   if (!content) return
@@ -79,7 +79,7 @@ const handleDownload = (base64: string) => {
     .inputs {
       width: 80%;
       border-radius: 2px;
-      padding-left: 10px;
+      padding-left: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -92,6 +92,7 @@ const handleDownload = (base64: string) => {
         outline: 0;
         border: 0;
         flex: 1;
+        font-size: 14px;
         background-color: unset;
       }
 

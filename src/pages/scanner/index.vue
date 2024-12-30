@@ -28,8 +28,8 @@ import { ref, onMounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
+import { error } from 'console'
 let html5QrCode = ref<any>(null)
-let historyRecords = ref<any>([])
 let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
@@ -109,10 +109,15 @@ const handleUploadImg = () => {
   f?.click();
   f.onchange = async function (e: any) {
     const file = e.target.files[0];
-    const data = await html5QrCode?.value.scanFile(file, true)
-    openDialog(data)
-    openHistoryDialog(data)
-    start()
+    try {
+      const data = await html5QrCode?.value.scanFile(file, true)
+      openDialog(data)
+      openHistoryDialog(data)
+    } catch (error) {
+      Toast.error('无法识别二维码或者二维码无效')
+    } finally {
+      start()
+    }
   };
 }
 </script>

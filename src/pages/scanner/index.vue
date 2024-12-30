@@ -28,7 +28,6 @@ import { ref, onMounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
-import { error } from 'console'
 let html5QrCode = ref<any>(null)
 let show = ref(false)
 let visible = ref(false)

@@ -11,7 +11,7 @@
       <SvgIcon name="history" color="#fff" size="40px" @click="openHistoryRecord" />
       <SvgIcon name="scan" class="qrcode" color="#fff" size="40px" @click="toQrCode" />
       <SvgIcon name="add" color="#fff" size="40px" @click="handleUploadImg" />
-      <input id="file" accept="image/*" style="display: none" type="file" />
+      <input id="image-code" accept="image/*" style="display: none" type="file" />
     </div>
     <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
     <HistoryContents v-model:open="show" title="扫码结果" :lists="contentLists" />
@@ -59,17 +59,13 @@ const start = () => {
     ?.start(
       { facingMode: 'environment' },
       {
-        fps: 40, // 设置每秒多少帧
+        fps: 60, // 设置每秒多少帧
         // qrbox: { width: 547, height: 547 } // 设置取景范围
         // scannable, rest shaded.
       },
       (decodedText: string, decodedResult: string) => {
-        if (!historyRecords.value.includes(decodedText))
-          if (contents.value != decodedText) {
-            contents.value = decodedText
-            if (!visible.value) visible.value = true
-          }
-        if (!(contentLists.value.some((item: string) => item == decodedText))) contentLists.value.push(decodedText)
+        openDialog(decodedText)
+        openHistoryDialog(decodedText)
         console.log(decodedResult)
       }
     )
@@ -90,7 +86,16 @@ const stop = async () => {
       })
   }
 }
-
+const openDialog = (strs: string) => {
+  if (contents.value == strs) return
+  if (contents.value == strs) return
+  if (visible.value) return
+  contents.value = strs
+  visible.value = true
+}
+const openHistoryDialog = (strs: string) => {
+  if (!(contentLists.value.some((item: string) => item == strs))) contentLists.value.push(strs)
+}
 const openHistoryRecord = () => {
   if (!contentLists.value?.length) return
   show.value = true
@@ -99,12 +104,21 @@ const toQrCode = () => {
   router.push('/qrcode')
 }
 const handleUploadImg = () => {
+  stop()
+  const f: any = document.getElementById("image-code");
+  f?.click();
+  f.onchange = async function (e: any) {
+    const file = e.target.files[0];
+    const data = await html5QrCode?.value.scanFile(file, true)
+    openDialog(data)
+    openHistoryDialog(data)
+    start()
+  };
 }
 </script>
 
 <style lang="scss" scoped>
 $-scanner-color: rgba(255, 165, 0, 1);
-
 .Scanner {
   flex: 1;
   overflow: hidden;

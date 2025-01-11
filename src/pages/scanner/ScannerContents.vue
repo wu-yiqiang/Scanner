@@ -2,16 +2,18 @@
   <Dialog v-model:visible="visible">
     <div class="card">
       <div v-if="title" class="title">{{ title }}</div>
-      <div class="contents">{{ contsnts }}</div>
+      <div class="contents">{{ contents }}</div>
       <div class="bottom-box">
         <div class="cancel" @click="visible = false">关闭</div>
-        <div class="submit" @click="handleCopy(props?.contsnts)">复制</div>
+        <div class="submit" @click="handleCopy(props?.contents)">复制</div>
+        <div v-if="isLink" class="visit" @click="handleVisit(props?.contents)">直接访问</div>
       </div>
     </div>
   </Dialog>
 </template>
 
 <script setup lang='ts'>
+import { isInternet } from '@/utils/validate';
 import { computed } from 'vue'
 import Dialog from '@/components/Dialog.vue'
 import Toast from '@/components/Toast/index.ts'
@@ -22,7 +24,7 @@ const props = defineProps({
     required: true,
     default: false,
   },
-  contsnts: {
+  contents: {
     type: String,
     required: true,
     default: "",
@@ -41,12 +43,17 @@ const visible = computed({
     emit('update:open', value)
   },
 })
-
-
+const isLink = computed(() => {
+  return isInternet(props?.contents)
+})
 const handleCopy = async (text: string) => {
   await navigator?.clipboard?.writeText(text);
   Toast.success('复制成功')
   visible.value = false
+}
+
+const handleVisit = (link: string) => {
+  window.open(link)
 }
 
 </script>
@@ -82,7 +89,7 @@ const handleCopy = async (text: string) => {
     display: flex;
     justify-content: flex-end;
     column-gap: 10px;
-    .cancel,
+    .cancel,.visit,
     .submit {
       padding: 4px;
       font-size: 16px;

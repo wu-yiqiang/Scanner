@@ -23,7 +23,6 @@ const open = computed({
 })
 watch(() => open?.value, (newVal) => {
   if (newVal) {
-    console.log("sds")
     nextTick(() => {
       dialogBoxRef.value?.showModal();
     })

@@ -13,7 +13,7 @@
       <SvgIcon name="add" color="#fff" size="40px" @click="handleUploadImg" />
       <input id="image-code" accept="image/*" style="display: none" type="file" />
     </div>
-    <ScannerContents v-model:open="visible" title="扫码结果" :contsnts="contents" />
+    <ScannerContents v-model:open="visible" title="扫码结果" :contents="contents" />
     <HistoryContents v-model:open="show" title="扫码结果" :lists="contentLists" />
   </div>
 </template>

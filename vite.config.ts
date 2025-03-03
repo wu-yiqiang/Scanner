@@ -45,7 +45,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg,jpeg}'],
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
       },
     }),
     vue(),

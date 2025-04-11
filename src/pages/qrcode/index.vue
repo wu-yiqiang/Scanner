@@ -24,7 +24,7 @@ import LogoTitle from '@/components/LogoTitle.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import { ref } from 'vue'
 import { base64ToBlob } from '@/utils/index'
-let contents = ref("https://sutter9527.top")
+let contents = ref("https://www.venturan.site")
 let code = ref("")
 const handleQRGenerator = async (content: string) => {
   if (!content) return

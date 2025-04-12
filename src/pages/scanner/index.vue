@@ -8,7 +8,10 @@
       </div>
     </div>
     <div class="tool-bar">
-      <SvgIcon name="history" color="#fff" size="40px" @click="openHistoryRecord" />
+      <div class="records">
+        <SvgIcon name="history" color="#fff" size="40px" @click="openHistoryRecord" />
+        <div class="circle" v-if="contentLists?.length">{{ contentLists?.length }}</div>
+      </div>
       <SvgIcon name="scan" class="qrcode" color="#fff" size="40px" @click="toQrCode" />
       <SvgIcon name="add" color="#fff" size="40px" @click="handleUploadImg" />
       <input id="image-code" accept="image/*" style="display: none" type="file" />
@@ -86,8 +89,6 @@ const stop = async () => {
   }
 }
 const openDialog = (strs: string) => {
-  if (contents.value == strs) return
-  if (contents.value == strs) return
   if (visible.value) return
   contents.value = strs
   visible.value = true
@@ -136,8 +137,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
     flex-grow: 1;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-
+    align-items: center;
     .border {
       background: linear-gradient(to left, $-scanner-color, $-scanner-color) left top no-repeat,
         linear-gradient(to bottom, $-scanner-color, $-scanner-color) left top no-repeat,
@@ -160,7 +160,6 @@ $-scanner-color: rgba(255, 165, 0, 1);
         width: 60vw;
         display: flex;
         justify-content: center;
-
       }
 
       .line {
@@ -191,7 +190,21 @@ $-scanner-color: rgba(255, 165, 0, 1);
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
-
+    .records {
+      position: relative;
+      .circle {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #e03434;
+        display: grid;
+        font-size: 12px;
+        place-content: center;
+      }
+    }
     .qrcode {
       border-radius: 50%;
     }

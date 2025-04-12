@@ -93,7 +93,7 @@ const handleVisit = (link: string) => {
     .submit {
       padding: 4px;
       font-size: 16px;
-      color: #4a7afe;
+      color: #0044ff;
       cursor: pointer;
     }
   }

@@ -103,7 +103,7 @@ const handleCopy = async (text: string) => {
         width: 40px;
         padding: 4px;
         font-size: 14px;
-        color: #4a7afe;
+        color: #0044ff;
         cursor: pointer;
       }
     }
@@ -119,7 +119,7 @@ const handleCopy = async (text: string) => {
     .cancel {
       padding: 4px;
       font-size: 16px;
-      color: #4a7afe;
+      color: #0044ff;
       cursor: pointer;
     }
   }

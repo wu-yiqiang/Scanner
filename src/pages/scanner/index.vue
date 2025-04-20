@@ -61,7 +61,7 @@ const start = () => {
     ?.start(
       { facingMode: 'environment' },
       {
-        fps: 60, // 设置每秒多少帧
+        fps: 80, // 设置每秒多少帧
         // qrbox: { width: 547, height: 547 } // 设置取景范围
         // scannable, rest shaded.
       },
@@ -169,7 +169,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
         border-radius: 2px;
         background-color: $-scanner-color;
         z-index: 999999;
-        animation: scan 1.5s ease-in-out both;
+        animation: scan 2s ease-in-out both;
         animation-direction: alternate;
         animation-iteration-count: infinite;
         box-shadow: 0px 0px 120px 20px rgba(255, 165, 0, .5);
@@ -177,10 +177,10 @@ $-scanner-color: rgba(255, 165, 0, 1);
 
       @keyframes scan {
         0% {
-          top: 25%;
+          top: 10%;
         }
         100% {
-          top: 75%;
+          top: 90%;
         }
       }
     }

@@ -153,13 +153,16 @@ $-scanner-color: rgba(255, 165, 0, 1);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       position: relative;
-
+      overflow: hidden;
       .reader {
-        min-height: 200px;
-        width: 60vw;
+        height: 240px;
+        width: 240px;
         display: flex;
         justify-content: center;
+        align-items: center;
+        margin: 4px 0;
       }
 
       .line {
@@ -177,10 +180,10 @@ $-scanner-color: rgba(255, 165, 0, 1);
 
       @keyframes scan {
         0% {
-          top: 10%;
+          top: 20%;
         }
         100% {
-          top: 90%;
+          top: 80%;
         }
       }
     }

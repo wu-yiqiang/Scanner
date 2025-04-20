@@ -82,7 +82,7 @@ const handleVisit = (link: string) => {
     overflow: auto;
     word-break: break-all;
     word-wrap: break-word;
-    color: var(--text-color-secondary);
+    color: var(--text-color);
   }
 
   .bottom-box {

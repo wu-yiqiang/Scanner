@@ -76,7 +76,6 @@ const handleCopy = async (text: string) => {
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
-    color: var(--text-color-secondary);
     &::-webkit-scrollbar {
       width: 0;
       height: 0;

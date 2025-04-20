@@ -138,6 +138,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
     .border {
       background: linear-gradient(to left, $-scanner-color, $-scanner-color) left top no-repeat,
         linear-gradient(to bottom, $-scanner-color, $-scanner-color) left top no-repeat,
@@ -155,14 +156,13 @@ $-scanner-color: rgba(255, 165, 0, 1);
       align-items: center;
       justify-content: center;
       position: relative;
-      overflow: hidden;
       .reader {
-        height: 240px;
-        width: 240px;
+        height: 220px;
+        width: 220px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 4px 0;
+        overflow: hidden;
       }
 
       .line {
@@ -199,10 +199,11 @@ $-scanner-color: rgba(255, 165, 0, 1);
         position: absolute;
         top: -5px;
         right: -10px;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         background-color: #e03434;
+        color: #fff;
         display: grid;
         font-size: 12px;
         place-content: center;

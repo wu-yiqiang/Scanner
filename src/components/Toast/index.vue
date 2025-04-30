@@ -85,11 +85,10 @@ onMounted(() => {
     line-height: 22px;
     display: grid;
     place-content: center;
-    white-space: nowrap;
-      overflow: hidden;
-        text-overflow: ellipsis;
-        word-break: break-all;
-      }
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+  }
 
       .icon {
         display: inline-flex;

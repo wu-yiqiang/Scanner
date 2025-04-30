@@ -7,6 +7,9 @@
         <div id="reader" class="reader" />
       </div>
     </div>
+    <div class="slide">
+      <Slider v-model="zoom" :min="1" :max="10"/>
+    </div>
     <div class="tool-bar">
       <div class="records">
         <SvgIcon name="history" color="#fff" size="40px" @click="openHistoryRecord" />
@@ -22,6 +25,8 @@
 </template>
 
 <script setup lang="ts">
+import Slider from '@vueform/slider'
+import '@vueform/slider/themes/default.css'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Toast from '@/components/Toast/index.ts'
 import LogoTitle from '@/components/LogoTitle.vue'
@@ -36,6 +41,8 @@ let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
+let zoom = ref(1)
+
 // let startTime = ref(new Date())
 onMounted(() => {
   getCameras()
@@ -46,10 +53,10 @@ onBeforeRouteLeave(() => {
 })
 
 const getCameras = async () => {
-  const devices = await Html5Qrcode.getCameras()
+  const devices = await Html5Qrcode?.getCameras()
     .catch((err) => {
       console.log("error", err)
-      Toast.error(`获取设备信息失败`)
+      Toast.error(`获取设备信息失败${err}`)
     })
   if (devices && devices.length) {
     html5QrCode.value = new Html5Qrcode('reader')
@@ -61,8 +68,11 @@ const start = () => {
     ?.start(
       { facingMode: 'environment' },
       {
-        fps: 80, // 设置每秒多少帧
-        // qrbox: { width: 547, height: 547 } // 设置取景范围
+        fps: 80,
+        aspectRatio: 1.0,
+        qrbox: {
+          width: 220, height: 220,
+        },
         // scannable, rest shaded.
       },
       (decodedText: string, decodedResult: string) => {
@@ -75,7 +85,6 @@ const start = () => {
       Toast.error(`Unable to start scanning, error: ${err}`)
     })
 }
-
 const stop = async () => {
   if (html5QrCode?.value) {
     await html5QrCode.value
@@ -124,6 +133,7 @@ const handleUploadImg = () => {
 
 <style lang="scss" scoped>
 $-scanner-color: rgba(255, 165, 0, 1);
+$-zoom : v-bind(zoom);
 .Scanner {
   flex: 1;
   overflow: hidden;
@@ -156,6 +166,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
       align-items: center;
       justify-content: center;
       position: relative;
+      overflow: hidden;
       .reader {
         height: 220px;
         width: 220px;
@@ -163,6 +174,7 @@ $-scanner-color: rgba(255, 165, 0, 1);
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        scale: $-zoom;
       }
 
       .line {
@@ -188,7 +200,21 @@ $-scanner-color: rgba(255, 165, 0, 1);
       }
     }
   }
-
+  .slide {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .slider-horizontal {
+      opacity: 0;
+      width: 0;
+    }
+    &:hover{
+      .slider-horizontal {
+              opacity: 1;
+          width: 200px;
+        }
+    }
+  }
   .tool-bar {
     display: flex;
     justify-content: space-between;

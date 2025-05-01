@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="slide">
-      <Slider v-model="zoom" :min="1" :max="10"/>
+      <Slider v-model="zoom" :min="0.5" :step="0.1" :max="10" :format="format" />
     </div>
     <div class="tool-bar">
       <div class="records">
@@ -42,8 +42,9 @@ let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
 let zoom = ref(1)
-
-// let startTime = ref(new Date())
+const format = (value: number) => {
+  return `${value.toFixed(1)}x`
+}
 onMounted(() => {
   getCameras()
 })
@@ -51,34 +52,37 @@ onMounted(() => {
 onBeforeRouteLeave(() => {
   stop()
 })
-
+const cameraId = ref('')
 const getCameras = async () => {
   const devices = await Html5Qrcode?.getCameras()
     .catch((err) => {
-      console.log("error", err)
       Toast.error(`获取设备信息失败${err}`)
     })
   if (devices && devices.length) {
+    cameraId.value = devices[0]?.id;
     html5QrCode.value = new Html5Qrcode('reader')
     start()
   }
 }
 const start = () => {
+
   html5QrCode.value
     ?.start(
-      { facingMode: 'environment' },
+      {
+        facingMode: 'environment',
+        // zoom: 10
+      },
       {
         fps: 80,
         aspectRatio: 1.0,
         qrbox: {
           width: 220, height: 220,
         },
-        // scannable, rest shaded.
       },
       (decodedText: string, decodedResult: string) => {
         openDialog(decodedText)
         openHistoryDialog(decodedText)
-        console.log(decodedResult)
+        console.log("decodedResult", decodedResult)
       }
     )
     .catch((err: string) => {
@@ -174,7 +178,7 @@ $-zoom : v-bind(zoom);
         justify-content: center;
         align-items: center;
         overflow: hidden;
-        scale: $-zoom;
+        // scale: $-zoom;
       }
 
       .line {
@@ -204,16 +208,22 @@ $-zoom : v-bind(zoom);
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 50px;
+    --slider-tooltip-font-size: 14px;
+    --slider-tooltip-line-height: 20px;
+    --slider-height: 14px;
+    --slider-connect-bg: rgba(255, 165, 0, 1);
+    --slider-tooltip-bg: rgba(255, 165, 0, 1);
     .slider-horizontal {
-      opacity: 0;
-      width: 0;
+      opacity: 1;
+      width: 200px;
     }
-    &:hover{
-      .slider-horizontal {
-              opacity: 1;
-          width: 200px;
-        }
-    }
+    // &:hover{
+    //   .slider-horizontal {
+    //       opacity: 1;
+    //       width: 200px;
+    //     }
+    // }
   }
   .tool-bar {
     display: flex;

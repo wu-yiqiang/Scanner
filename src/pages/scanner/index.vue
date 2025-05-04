@@ -79,13 +79,6 @@ const start = () => {
     ?.start(
       { facingMode: { exact: "environment" } },
       // cameraId.value,
-      // {
-      //   fps: 80,
-      //   aspectRatio: 1.0,
-      //   qrbox: {
-      //     width: 220, height: 220,
-      //   },
-      // },
       {
         fps: 80, qrbox: { width: 220, height: 220 },
         aspectRatio: 1,

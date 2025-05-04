@@ -8,7 +8,8 @@
       </div>
     </div>
     <div class="slide">
-      <Slider v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format" @change="handleZoom" />
+      <Slider v-if="zoomMax" v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format"
+        @change="handleZoom" />
     </div>
     <div class="tool-bar">
       <!-- {{ cameras }} -->
@@ -34,7 +35,7 @@ import LogoTitle from '@/components/LogoTitle.vue'
 import ScannerContents from './ScannerContents.vue'
 import HistoryContents from './HistoryContents.vue'
 import { ref, onMounted } from 'vue'
-import { CameraDevice, Html5Qrcode } from 'html5-qrcode'
+import { Html5Qrcode, Html5QrcodeResult } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
 let html5QrCode = ref<any>(null)
@@ -43,9 +44,9 @@ let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
 let zoom = ref(1)
-let zoomMin = ref(0.2)
-let zoomMax = ref(10)
-let cameras = ref<CameraDevice | null>()
+let zoomMin = ref(0)
+let zoomMax = ref(0)
+// let cameras = ref<CameraDevice | null>()
 const format = (value: number) => {
   return `${value.toFixed(1)}x`
 }
@@ -61,21 +62,26 @@ const handleZoom = async () => {
   await stop()
   await start()
 }
+let datas =  ref(0)
 const getCameras = async () => {
   const devices = await Html5Qrcode?.getCameras()
     .catch((err) => {
       Toast.error(`获取设备信息失败${err}`)
     })
   if (devices && devices.length) {
-    console.log("device", devices)
     // Toast.success(`cam:${JSON.stringify(devices)}`, 0)
     cameraId.value = devices[1]?.id;
     html5QrCode.value = new Html5Qrcode('reader')
-    start()
+    await start()
+    const data = html5QrCode.value.getRunningTrackCameraCapabilities()
+    const devicesInfo = data.zoomFeature()?.getCapabilities()
+    datas.value = devicesInfo
+    zoomMax.value = devicesInfo?.max ?? 0
+    zoomMin.value = devicesInfo?.min ?? 0
   }
 }
-const start = () => {
-  html5QrCode.value
+const start = async () => {
+  await html5QrCode.value
     ?.start(
       { facingMode: { exact: "environment" } },
       // cameraId.value,
@@ -87,7 +93,7 @@ const start = () => {
           facingMode: 'environment'
         }
       },
-      (decodedText: string, decodedResult: string) => {
+      (decodedText: string, decodedResult: Html5QrcodeResult) => {
         openDialog(decodedText)
         openHistoryDialog(decodedText)
         console.log("decodedResult", decodedResult)

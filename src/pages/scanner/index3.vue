@@ -4,18 +4,11 @@
   </section>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import { Html5QrcodeScanner } from 'html5-qrcode'
-import Toast from '@/components/Toast';
+import { onMounted } from 'vue';
+import { Html5QrcodeResult, Html5QrcodeScanner } from 'html5-qrcode'
+// import Toast from '@/components/Toast';
 // const html5QrcodeScanner = ref(null)
 const init = () => {
-  function onScanSuccess(decodedText: string, decodedResult: string) {
-    console.log(`Code matched = ${decodedText}`, decodedResult);
-    Toast.success(decodedResult, 0)
-  }
-  function onScanFailure(error: Error) {
-    console.warn(`Code scan error = ${error}`);
-  }
   let html5QrcodeScanner = new Html5QrcodeScanner(
     "reader",
     {
@@ -26,7 +19,12 @@ const init = () => {
       defaultZoomValueIfSupported: 2
     },
   /* verbose= */ false);
-  html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+  html5QrcodeScanner.render((decodedText: string, decodedResult: Html5QrcodeResult) => {
+    console.log(`Code matched = ${decodedText}`, decodedResult);
+    // Toast.success(decodedResult, 0)
+  }, () => {
+
+  });
 }
 onMounted(() => {
   init()

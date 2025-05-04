@@ -23,7 +23,14 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "App.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "App.vue",
+    "src/pages/scanner/index.vue"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

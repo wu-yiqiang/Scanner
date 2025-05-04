@@ -8,10 +8,9 @@
       </div>
     </div>
     <div class="slide">
-      <Slider v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format" @change="handleZoom" />
+      <Slider v-model="zoom" :min="0.2" :step="0.1" :max="10" :format="format" @change="handleZoom" />
     </div>
     <div class="tool-bar">
-      <!-- {{ cameras }} -->
       <div class="records">
         <SvgIcon name="history" color="#fff" size="40px" @click="openHistoryRecord" />
         <div class="circle" v-if="contentLists?.length">{{ contentLists?.length }}</div>
@@ -34,7 +33,7 @@ import LogoTitle from '@/components/LogoTitle.vue'
 import ScannerContents from './ScannerContents.vue'
 import HistoryContents from './HistoryContents.vue'
 import { ref, onMounted } from 'vue'
-import { CameraDevice, Html5Qrcode } from 'html5-qrcode'
+import { Html5QrcodeScanner } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
 let html5QrCode = ref<any>(null)
@@ -43,79 +42,49 @@ let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
 let zoom = ref(1)
-let zoomMin = ref(0.2)
-let zoomMax = ref(10)
-let cameras = ref<CameraDevice | null>()
 const format = (value: number) => {
   return `${value.toFixed(1)}x`
 }
+const config = ref({
+  fps: 10, qrbox: { width: 250, height: 250 },
+  aspectRatio: 1 / 1,
+  showTorchButtonIfSupported: true,
+  showZoomSliderIfSupported: true,
+  defaultZoomValueIfSupported: 2
+})
 onMounted(() => {
-  getCameras()
+  init()
 })
 
 onBeforeRouteLeave(() => {
   stop()
 })
-const cameraId = ref('')
-const handleZoom = async () => {
-  await stop()
-  await start()
-}
-const getCameras = async () => {
-  const devices = await Html5Qrcode?.getCameras()
-    .catch((err) => {
-      Toast.error(`获取设备信息失败${err}`)
-    })
-  if (devices && devices.length) {
-    console.log("device", devices)
-    // Toast.success(`cam:${JSON.stringify(devices)}`, 0)
-    cameraId.value = devices[1]?.id;
-    html5QrCode.value = new Html5Qrcode('reader')
-    start()
+const init = () => {
+  function onScanSuccess(decodedText: string, decodedResult: string) {
+    console.log(`Code matched = ${decodedText}`, decodedResult);
+    Toast.success(decodedResult, 0)
   }
+  function onScanFailure(error: Error) {
+    console.warn(`Code scan error = ${error}`);
+  }
+  html5QrCode.value = new Html5QrcodeScanner(
+    "reader",
+    config.value,
+  false);
+  html5QrCode.value.render(onScanSuccess, onScanFailure);
 }
-const start = () => {
-  html5QrCode.value
-    ?.start(
-      { facingMode: { exact: "environment" } },
-      // cameraId.value,
-      // {
-      //   fps: 80,
-      //   aspectRatio: 1.0,
-      //   qrbox: {
-      //     width: 220, height: 220,
-      //   },
-      // },
-      {
-        fps: 80, qrbox: { width: 220, height: 220 },
-        aspectRatio: 1,
-        videoConstraints: {
-          zoom: zoom.value,
-          facingMode: 'environment'
-        }
-      },
-      (decodedText: string, decodedResult: string) => {
-        openDialog(decodedText)
-        openHistoryDialog(decodedText)
-        console.log("decodedResult", decodedResult)
-      }
-    )
-    .catch((err: string) => {
-      Toast.error(`Unable to start scanning, error: ${err}`)
-    })
+const handleZoom = (value: number) => {
+  console.log("value", value)
+  config.value.defaultZoomValueIfSupported = value
+  stop()
+  init()
 }
 const stop = async () => {
-  if (html5QrCode?.value) {
-    await html5QrCode.value
-      .stop()
-      .then((ignore: string) => {
-        console.log(ignore)
-      })
-      .catch((err: string) => {
-        Toast.error(`Unable to stop scanning.\n${err}`)
-      })
-  }
-}
+  await html5QrCode.value.clear()
+ }
+onMounted(() => {
+  init()
+})
 const openDialog = (strs: string) => {
   if (visible.value) return
   contents.value = strs
@@ -144,7 +113,7 @@ const handleUploadImg = () => {
     } catch (error) {
       Toast.error('无法识别二维码或者二维码无效')
     } finally {
-      start()
+      // start()
     }
   };
 }
@@ -197,6 +166,7 @@ $-zoom : v-bind(zoom);
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        // scale: $-zoom;
       }
 
       .line {
@@ -240,12 +210,15 @@ $-zoom : v-bind(zoom);
       width: 200px;
     }
   }
+
   .tool-bar {
     display: flex;
     justify-content: space-between;
     padding: 0 10px;
+
     .records {
       position: relative;
+
       .circle {
         position: absolute;
         top: -5px;
@@ -260,6 +233,7 @@ $-zoom : v-bind(zoom);
         place-content: center;
       }
     }
+
     .qrcode {
       border-radius: 50%;
     }

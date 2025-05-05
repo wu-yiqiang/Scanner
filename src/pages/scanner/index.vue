@@ -151,8 +151,6 @@ const handleUploadImg = () => {
 
 <style lang="scss" scoped>
 $-scanner-color: #ffa500ff;
-$-zoom : v-bind(zoom);
-
 .Scanner {
   flex: 1;
   overflow: hidden;
@@ -161,7 +159,6 @@ $-zoom : v-bind(zoom);
   justify-content: space-between;
   row-gap: 10px;
   padding: 10px;
-
   .scan {
     flex: 1;
     flex-grow: 1;

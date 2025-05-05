@@ -62,7 +62,8 @@ const handleZoom = async () => {
   await stop()
   await start()
 }
-let datas =  ref(0)
+let datas = ref(0)
+let touch = ref(false)
 const getCameras = async () => {
   const devices = await Html5Qrcode?.getCameras()
     .catch((err) => {
@@ -74,7 +75,9 @@ const getCameras = async () => {
     html5QrCode.value = new Html5Qrcode('reader')
     await start()
     const data = html5QrCode.value.getRunningTrackCameraCapabilities()
-    const devicesInfo = data.zoomFeature()?.getCapabilities()
+    const torch = data.torchFeature()?.isSupported()
+    touch.value = torch ?? false
+    const devicesInfo = data.zoomFeature()?.isSupported() && data.zoomFeature()?.getCapabilities()
     datas.value = devicesInfo
     zoomMax.value = devicesInfo?.max ?? 0
     zoomMin.value = devicesInfo?.min ?? 0

@@ -1,16 +1,16 @@
 const routers = [
   {
     path: '/',
-    redirect: `/scanner`,
+    redirect: `/scanCode`,
     meta: {
       nameId: 'home',
     },
   },
   {
-    path: '/scanner',
-    component: () => import('@/pages/scanner/index.vue'),
+    path: '/scanCode',
+    component: () => import('@/pages/scancode/index.vue'),
     meta: {
-      nameId: 'scanner',
+      nameId: 'ScanCode',
     },
   },
   {

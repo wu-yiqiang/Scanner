@@ -11,7 +11,7 @@ const pathResolve = (dir: string): string => {
 }
 
 export default defineConfig({
-  // base: '/scanner',
+  base: '/scanner',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),

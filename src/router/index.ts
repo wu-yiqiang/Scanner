@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import routers from './routers'
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/scanner'),
   routes: routers,
 })
 

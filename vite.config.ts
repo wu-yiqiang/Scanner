@@ -27,7 +27,7 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/scanner',
         icons: [
           {
             src: '/src/assets/images/logo-192.png',

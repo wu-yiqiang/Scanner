@@ -4,8 +4,12 @@
     <div class="scan">
       <div class="border">
         <div class="line"></div>
-        <div id="reader" class="reader" />
+        <div id="reader" ref="readerRef" class="reader" />
       </div>
+    </div>
+    <div v-if="supportsTorch" @click="toggleTorch">
+      <SvgIcon v-if="isTorchOn" name="on" size="40px" />
+      <SvgIcon v-else name="off" size="40px" />
     </div>
     <div class="slide">
       <Slider v-if="zoomMax" v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format"
@@ -43,9 +47,15 @@ let show = ref(false)
 let visible = ref(false)
 let contents = ref("")
 let contentLists = ref(<any>[])
+const readerRef = ref(null)
+const videoTrack = ref<MediaStreamTrack | null>(null)
+const supportsTorch = ref(false)
+const isTorchOn = ref(false)
+const supportsZoom = ref(false)
 let zoom = ref(1)
 let zoomMin = ref(0)
 let zoomMax = ref(0)
+
 // let cameras = ref<CameraDevice | null>()
 const format = (value: number) => {
   return `${value.toFixed(1)}x`
@@ -83,6 +93,19 @@ const getCameras = async () => {
     zoomMin.value = devicesInfo?.min ?? 0
   }
 }
+const initCameraControls = () => {
+  if (!videoTrack.value) return
+  const caps = videoTrack.value.getCapabilities()
+  if ('torch' in caps) {
+    supportsTorch.value = true
+  }
+  if (caps?.zoom) {
+    supportsZoom.value = true
+    zoomMin.value = caps.zoom.min || 1.0
+    zoomMax.value = caps.zoom.max || 4.0
+    zoom.value = caps.zoom.current !== undefined ? caps.zoom.current : zoomMin.value
+  }
+}
 const start = async () => {
   await html5QrCode.value
     ?.start(
@@ -105,6 +128,15 @@ const start = async () => {
     .catch((err: string) => {
       Toast.error(`Unable to start scanning, error: ${err}`)
     })
+  const video = readerRef.value?.querySelector('video')
+  if (video && video.srcObject instanceof MediaStream) {
+    const stream = video.srcObject
+    const tracks = stream.getVideoTracks()
+    if (tracks.length > 0) {
+      videoTrack.value = tracks[0]
+      initCameraControls()
+    }
+  }
 }
 const stop = async () => {
   if (html5QrCode?.value) {
@@ -116,6 +148,19 @@ const stop = async () => {
       .catch((err: string) => {
         Toast.error(`Unable to stop scanning.\n${err}`)
       })
+  }
+}
+const toggleTorch = async () => {
+  if (!videoTrack.value) return
+  isTorchOn.value = !isTorchOn.value
+  try {
+    await videoTrack.value.applyConstraints({
+      advanced: [{ torch: isTorchOn.value }]
+    })
+  } catch (err) {
+    console.error('闪光灯控制失败:', err)
+    isTorchOn.value = false
+    alert('无法控制闪光灯')
   }
 }
 const openDialog = (strs: string) => {
@@ -154,6 +199,7 @@ const handleUploadImg = () => {
 
 <style lang="scss" scoped>
 $-scanner-color: #ffa500ff;
+
 .Scanner {
   flex: 1;
   overflow: hidden;
@@ -162,6 +208,7 @@ $-scanner-color: #ffa500ff;
   justify-content: space-between;
   row-gap: 10px;
   padding: 10px;
+
   .scan {
     flex: 1;
     flex-grow: 1;
@@ -196,72 +243,79 @@ $-scanner-color: #ffa500ff;
         justify-content: center;
         align-items: center;
         overflow: hidden;
-      }
 
-      .line {
-        position: absolute;
-        width: 70%;
-        height: 4px;
-        border-radius: 2px;
-        background-color: $-scanner-color;
-        z-index: 999999;
-        animation: scan 2s ease-in-out both;
-        animation-direction: alternate;
-        animation-iteration-count: infinite;
-        box-shadow: 0px 0px 120px 20px rgba(255, 165, 0, .5);
-      }
 
-      @keyframes scan {
-        0% {
-          top: 20%;
+        .line {
+          position: absolute;
+          width: 70%;
+          height: 4px;
+          border-radius: 2px;
+          background-color: $-scanner-color;
+          z-index: 999999;
+          animation: scan 2s ease-in-out both;
+          animation-direction: alternate;
+          animation-iteration-count: infinite;
+          box-shadow: 0px 0px 120px 20px rgba(255, 165, 0, .5);
         }
 
-        100% {
-          top: 80%;
+        @keyframes scan {
+          0% {
+            top: 20%;
+          }
+
+          100% {
+            top: 80%;
+          }
         }
       }
     }
-  }
 
-  .slide {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
-    --slider-tooltip-font-size: 14px;
-    --slider-tooltip-line-height: 20px;
-    --slider-height: 14px;
-    --slider-connect-bg: #ffa500ff;
-    --slider-tooltip-bg: #ffa500ff;
+    .slide {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 50px;
+      --slider-tooltip-font-size: 14px;
+      --slider-tooltip-line-height: 20px;
+      --slider-height: 14px;
+      --slider-connect-bg: #ffa500ff;
+      --slider-tooltip-bg: #ffa500ff;
 
-    .slider-horizontal {
-      opacity: 1;
-      width: 200px;
-    }
-  }
-  .tool-bar {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 10px;
-    .records {
-      position: relative;
-      .circle {
-        position: absolute;
-        top: -5px;
-        right: -10px;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background-color: #e03434;
-        color: #fff;
-        display: grid;
-        font-size: 12px;
-        place-content: center;
+      .slider-horizontal {
+        opacity: 1;
+        width: 200px;
+
       }
+
+    
     }
-    .qrcode {
-      border-radius: 50%;
-    }
+            .tool-bar {
+              display: flex;
+              justify-content: space-between;
+              padding: 0 10px;
+      
+              .records {
+                position: relative;
+      
+                .circle {
+                  position: absolute;
+                  top: -5px;
+                  right: -10px;
+                  width: 24px;
+                  height: 24px;
+                  border-radius: 50%;
+                  background-color: #e03434;
+                  color: #fff;
+                  display: grid;
+                  font-size: 12px;
+                  place-content: center;
+                }
+              }
+      
+              .qrcode {
+                border-radius: 50%;
+              }
+            }
   }
 }
 </style>

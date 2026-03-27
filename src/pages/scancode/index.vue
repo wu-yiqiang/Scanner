@@ -50,8 +50,8 @@ let contentLists = ref(<any>[])
 let zoom = ref(1)
 let zoomMin = ref(0)
 let zoomMax = ref(0)
-const readerRef = ref(null)
-const videoTrack = ref<MediaStreamTrack | null>(null)
+const readerRef = ref<HTMLDivElement | null>(null)
+const videoTrack = ref<any>(null)
 const supportsTorch = ref(false)
 const isTorchOn = ref(false)
 const supportsZoom = ref(false)
@@ -67,10 +67,6 @@ onBeforeRouteLeave(() => {
   stop()
 })
 const cameraId = ref('')
-const handleZoom = async () => {
-  await stop()
-  await start()
-}
 let datas = ref(0)
 let touch = ref(false)
 const getCameras = async () => {
@@ -116,8 +112,8 @@ const start = async () => {
     })
   nextTick(() => {
     const video = readerRef.value?.querySelector('video')
-    if (video && video.srcObject instanceof MediaStream) {
-      const stream = video.srcObject
+    if (video && video?.srcObject instanceof MediaStream) {
+      const stream = video?.srcObject
       const tracks = stream.getVideoTracks()
       if (tracks.length > 0) {
         videoTrack.value = tracks[0]
@@ -174,7 +170,7 @@ const handleUploadImg = () => {
 
 const initCameraControls = () => {
   if (!videoTrack.value) return
-  const caps = videoTrack.value.getCapabilities()
+  const caps = videoTrack.value.getCapabilities() as any
   if ('torch' in caps) {
     supportsTorch.value = true
   }
@@ -189,8 +185,8 @@ const toggleTorch = async () => {
   if (!videoTrack.value) return
   isTorchOn.value = !isTorchOn.value
   try {
-    await videoTrack.value.applyConstraints({
-      advanced: [{ torch: isTorchOn.value }]
+    await videoTrack.value?.applyConstraints({
+      advanced: [{ torch: isTorchOn.value}]
     })
   } catch (err) {
     console.error('闪光灯控制失败:', err)

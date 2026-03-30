@@ -11,7 +11,6 @@
       <SvgIcon v-if="isTorchOn" name="on" size="40px" />
       <SvgIcon v-else name="off" size="40px" />
     </div>
-   {{ zoomMin }} {{ zoomMax }} {{ zoom }}
     <div class="slide">
       <Slider v-if="zoomMax" v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format"
         @update="applyZoom" />

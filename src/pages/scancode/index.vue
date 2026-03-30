@@ -11,6 +11,7 @@
       <SvgIcon v-if="isTorchOn" name="on" size="40px" />
       <SvgIcon v-else name="off" size="40px" />
     </div>
+   {{ zoomMin }} {{ zoomMax }} {{ zoom }}
     <div class="slide">
       <Slider v-if="zoomMax" v-model="zoom" :min="zoomMin" :step="0.1" :max="zoomMax" :format="format"
         @update="applyZoom" />
@@ -42,14 +43,14 @@ import { ref, onMounted, nextTick } from 'vue'
 import { Html5Qrcode, Html5QrcodeResult } from 'html5-qrcode'
 import router from '@/router/index'
 import { onBeforeRouteLeave } from 'vue-router'
-let html5QrCode = ref<any>(null)
-let show = ref(false)
-let visible = ref(false)
-let contents = ref("")
-let contentLists = ref(<any>[])
-let zoom = ref(1)
-let zoomMin = ref(0)
-let zoomMax = ref(0)
+const html5QrCode = ref<any>(null)
+const show = ref(false)
+const visible = ref(false)
+const contents = ref("")
+const contentLists = ref(<any>[])
+const zoom = ref(1)
+const zoomMin = ref(0)
+const zoomMax = ref(0)
 const readerRef = ref<HTMLDivElement | null>(null)
 const videoTrack = ref<any>(null)
 const supportsTorch = ref(false)
@@ -67,8 +68,6 @@ onBeforeRouteLeave(() => {
   stop()
 })
 const cameraId = ref('')
-let datas = ref(0)
-let touch = ref(false)
 const getCameras = async () => {
   const devices = await Html5Qrcode?.getCameras()
     .catch((err) => {
@@ -79,13 +78,6 @@ const getCameras = async () => {
     cameraId.value = devices[1]?.id;
     html5QrCode.value = new Html5Qrcode('reader')
     await start()
-    const data = html5QrCode.value.getRunningTrackCameraCapabilities()
-    const torch = data.torchFeature()?.isSupported()
-    touch.value = torch ?? false
-    const devicesInfo = data.zoomFeature()?.isSupported() && data.zoomFeature()?.getCapabilities()
-    datas.value = devicesInfo
-    zoomMax.value = devicesInfo?.max ?? 0
-    zoomMin.value = devicesInfo?.min ?? 0
   }
 }
 const start = async () => {
@@ -176,9 +168,9 @@ const initCameraControls = () => {
   }
   if (caps?.zoom) {
     supportsZoom.value = true
-    zoomMin.value = caps.zoom.min || 1.0
-    zoomMax.value = caps.zoom.max || 4.0
-    zoom.value = caps.zoom.current !== undefined ? caps.zoom.current : zoomMin.value
+    zoomMin.value = caps.zoom?.min || 1.0
+    zoomMax.value = caps.zoom?.max || 1.0
+    zoom.value = caps.zoom?.current !== undefined ? caps.zoom.current : zoomMin.value
   }
 }
 const toggleTorch = async () => {
